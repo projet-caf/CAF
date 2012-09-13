@@ -173,7 +173,7 @@ class MenuController extends Controller
 				return $this->redirect($this->generateUrl('entries',array('menu' => $menu_taxonomy, 'nb_elem' => $nb_elem)));
 			}
 		}
-		return array('form' => $form->createView(), 'ref_id' => 0, 'lang' => '', 'id' => 0, 'target' => null, 'menu_taxonomy' => $menu_taxonomy);
+		return array('form' => $form->createView(), 'ref_id' => 0, 'lang' => '', 'id' => 0, 'target' => null, 'menu_taxonomy' => $menu_taxonomy, 'nb_elem' => $nb_elem);
 	}
 
 	/**
@@ -185,20 +185,35 @@ class MenuController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 		$menu = new Menu();
 		$menu_taxonomy_obj = $this->getDoctrine()->getRepository('CAFMenuBundle:MenuTaxonomy')->find($menu_taxonomy);
-		$form = $this->createForm(new MenuType(), $menu, array('menu_taxonomy' => $menu_taxonomy_obj));
 
+                $tablang = explode('_', $lang);
+                $maLang = $tablang[0];                
+                
+                $lang_id = $this->getDoctrine()->getRepository('CAFAdminBundle:Language')->findBy(array('code'=>$maLang));
+                
+                $lang_id = current($lang_id);
+                $lang_id = $lang_id->getId();
+               
+                
+                $form = $this->createForm(new MenuType(), $menu, array('menu_taxonomy' => $menu_taxonomy_obj, 'lang' => $lang_id, 'nb_elem' => $nb_elem));
+
+                
+                
+                
 		$request = $this->getRequest();
 
 		if ('POST' === $request->getMethod()) {
 
 			$form->bindRequest($request);
 
-			if ($form->isValid()) {
+                        $data = $form->getData();
+                        //var_dump($data->getMyCategory());
+                        
+			//if ($form->isValid()) {
 
-				
 				$category = $menu->getCategory();
-				$content = $menu->getContent();
-
+                                $content  = $menu->getContent();
+                                
 				$em = $this->getDoctrine()->getEntityManager();
 				$repository = $em->getRepository('CAFMenuBundle:Menu');
 
@@ -206,7 +221,7 @@ class MenuController extends Controller
 				$original->setTranslatableLocale($lang);                                
                                 
 				if ($content != null) {
-
+                                   //$content  = $content->getContent();
 				}
 
                                 //$menu->setSlug();
@@ -216,8 +231,8 @@ class MenuController extends Controller
 				$original->setLinkTaxonomy($menu->getLinkTaxonomy());
 				$original->setPublished($menu->getPublished());
 				$original->setUrls($menu->getUrls());
-				$original->setCategory($menu->getCategory());
-				$original->setContent($menu->getContent());
+				$original->setCategory($category);
+				$original->setContent($content);
 				$original->setMedia($menu->getMedia());
 				
 				
@@ -225,10 +240,10 @@ class MenuController extends Controller
 				$em->flush();
 
 
-                $this->get('session')->setFlash('success', 'Nouvelle entrée sauvegardée');
+                                $this->get('session')->setFlash('success', 'Nouvelle entrée sauvegardée');
 
 				return $this->redirect($this->generateUrl('entries',array('menu' => $menu_taxonomy, 'nb_elem' => $nb_elem)));
-			}
+			//}
 		}
 		return array('form' => $form->createView(), 'ref_id' => 0, 'lang' => $lang, 'id' => $id, 'target' => null, 'menu_taxonomy' => $menu_taxonomy, 'nb_elem' => $nb_elem);
 	}
@@ -256,9 +271,6 @@ class MenuController extends Controller
 
 			if ($form->isValid()) {
  
-                            
-                                //var_dump($form->getData());
-                                //die;
                             
                                 $em         = $this->getDoctrine()->getEntityManager();
 				$repository = $em->getRepository('CAFMenuBundle:Menu');
@@ -498,24 +510,31 @@ class MenuController extends Controller
 	}
 
         /**
-	 * @Route("/getCategoryAjax", name="getCategoryAjax")
+	 * @Route("/getCategoryAjax/{lang}", name="getCategoryAjax", defaults={"lang"="fr_fr"})
 	 * @Template()
 	 **/
-	public function getAllCategoryAction(Request $request)
+	public function getAllCategoryAction(Request $request, $lang)
 	{
+            
             if($request->isXmlHttpRequest())
 	    {
 	        $idcat = $request->request->get('idcat');
 
 	        $em = $this->container->get('doctrine')->getEntityManager();
 
+                $tablang = explode("_", $lang);
+                $lang = $tablang[0];
+                
 	        if($idcat)
 	        {
-                      $message = $this->getDoctrine()
-					 ->getRepository('CAFContentBundle:CategoryTranslation')
-					 ->find($idcat);	
-                       $contents = $message->getContents();
+
+                    $contents = $this->getDoctrine()
+					 ->getRepository('CAFContentBundle:Content')	
+                                         ->getContents(1000, $idcat, $lang);
                        
+                    //echo $contents;
+                    //die;
+                    
                        return $this->container->get('templating')->renderResponse('CAFAdminBundle:Select:select.html.twig', array(
 		            'message' =>  $contents
 		            ));

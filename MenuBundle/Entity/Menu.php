@@ -74,13 +74,13 @@ class Menu implements Translatable
     private $urls_content;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CAF\ContentBundle\Entity\Category", inversedBy="menus")
+     * @ORM\ManyToOne(targetEntity="CAF\ContentBundle\Entity\CategoryTranslation", inversedBy="menus")
      * @ORM\JoinColumn(name="category", nullable=true)
      */
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CAF\ContentBundle\Entity\Content", inversedBy="menus")
+     * @ORM\ManyToOne(targetEntity="CAF\ContentBundle\Entity\ContentTranslation", inversedBy="menus")
      * @ORM\JoinColumn(name="content", nullable=true)
      */
     private $content;
@@ -181,6 +181,11 @@ class Menu implements Translatable
      */
     public $file;
 
+    /**
+     * @var array myCategory
+     */
+    private $myCategory;   
+      
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -219,7 +224,17 @@ class Menu implements Translatable
     {
         return $this->title;
     }
-
+    
+    public function getMyCategory()
+    {
+        return $this->myCategory;
+    }    
+    
+    public function setMyCategory(array $myCategory)
+    {
+        $this->myCategory = $myCategory;
+    }    
+    
     public function setDescription($description)
     {
         $this->description = $description;
@@ -636,7 +651,7 @@ class Menu implements Translatable
      * @param CAF\ContentBundle\Entity\Category $category
      * @return Menu
      */
-    public function setCategory(\CAF\ContentBundle\Entity\Category $category = null)
+    public function setCategory(\CAF\ContentBundle\Entity\CategoryTranslation $category = null)
     {
         $this->category = $category;
     
@@ -659,7 +674,7 @@ class Menu implements Translatable
      * @param CAF\ContentBundle\Entity\Content $content
      * @return Menu
      */
-    public function setContent(\CAF\ContentBundle\Entity\Content $content = null)
+    public function setContent(\CAF\ContentBundle\Entity\ContentTranslation $content = null)
     {
         $this->content = $content;
     

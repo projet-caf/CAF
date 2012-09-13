@@ -55,6 +55,12 @@ class MenuTranslation extends AbstractPersonalTranslation
     protected $field;
 
     /**
+     * @var string $category
+     * @ORM\Column(name="category")
+     */
+    protected $category;    
+    
+    /**
      * @var string $content
      * @ORM\Column(name="content")
      */
@@ -166,5 +172,61 @@ class MenuTranslation extends AbstractPersonalTranslation
     public function getObject()
     {
         return $this->object;
+    }
+
+    /**
+     * Set category
+     *
+     * @param CAF\MenuBundle\Entity\Menu $category
+     * @return MenuTranslation
+     */
+    public function setCategory(\CAF\MenuBundle\Entity\Menu $category = null)
+    {
+        $this->category = $category;
+    
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return CAF\MenuBundle\Entity\Menu 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Add countries
+     *
+     * @param CAF\AdminBundle\Entity\Country $countries
+     * @return MenuTranslation
+     */
+    public function addCountrie(\CAF\AdminBundle\Entity\Country $countries)
+    {
+        $this->countries[] = $countries;
+    
+        return $this;
+    }
+
+    /**
+     * Remove countries
+     *
+     * @param CAF\AdminBundle\Entity\Country $countries
+     */
+    public function removeCountrie(\CAF\AdminBundle\Entity\Country $countries)
+    {
+        $this->countries->removeElement($countries);
+    }
+
+    /**
+     * Get countries
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getCountries()
+    {
+        return $this->countries;
     }
 }

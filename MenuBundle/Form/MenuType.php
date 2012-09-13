@@ -15,6 +15,8 @@ class MenuType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 
+                $lang_id = $options["lang"];
+            
 		$menu_taxonomy = $options['menu_taxonomy'];
 		$builder->add('title','text', array('label' => 'Titre'))
 				->add('slug', 'text', array('required' => false, 'label' => 'Alias'))
@@ -40,8 +42,24 @@ class MenuType extends AbstractType
 					'empty_value' => 'Choisissez un contenu',
 					'required' => false,
 					))*/
-                                ->add('category','select', array('required' => false))
+                                //->add('myCategory','select', array('required' => false, 'lang_id' => $options['lang'], 'label' => ' '))
 
+                                ->add('category', 'entity', array(
+                                    'class' => 'CAFContentBundle:CategoryTranslation',
+                                    'query_builder' => function(EntityRepository $er) use ($lang_id) {
+                                            return $er->getCategoryLang($lang_id);
+                                        },                                                                                   
+                                    'property' => 'title',
+                                    'required'  => false,
+                                    'empty_value' => '-'            
+                                    ))
+                                ->add('content', 'entity', array(
+                                    'class' => 'CAFContentBundle:ContentTranslation',   
+                                    'empty_value' => '-',
+                                    'required'  => false,
+                                    'property' => 'title',
+                                    ))                            
+                        
 				->add('urls', 'text', array('attr' => array('class' => 'url'),'required' => false))
 				->add('parent', 'entity', array(
 				    'class' => 'CAFMenuBundle:Menu',
