@@ -1,0 +1,140 @@
+{% extends "::admin.html.twig" %}
+{% block title "Gestion des blocs" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Blocs" %}
+{% block action %}
+	<a href="#modalNew" class="btn" data-toggle="modal"><i class="icon-plus-sign"></i> Ajouter</a>
+	<div class="modal hide" id="modalNew">
+		<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal">×</button>
+	    	<h3>Nouveau bloc</h3>
+	    </div>
+	    <form action="{{ path("new_bloc") }}" method="get">
+	    <div class="modal-body">
+	    	{{ form_widget(form) }}
+	    </div>
+	    <div class="modal-footer">
+			<a class="btn" href="{{ path('blocs') }}">Annuler</a>			
+	    	<input type="submit" class="btn btn-primary" value="Valider" />
+	    </div>
+	</div>
+{% endblock action %}
+
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+
+	
+    <div class="tabbable tabs-right">
+		<ul class="nav nav-tabs">
+			{% for key, position in blocs %}
+				{% set class = '' %}
+
+				{% if tab_id == 'null' %}
+					{% if loop.index == 1 %}
+						{% set class = 'active' %}
+					{% else %}
+						{% set class = '' %}
+					{% endif %}
+				{% else %}
+					{% if loop.index == tab_id %}
+						{% set class = 'active' %}
+					{% else %}
+						{% set class = '' %}
+					{% endif %}
+				{% endif %}
+
+   				<li class="{{ class }}"><a href="#tab{{loop.index}}" data-toggle="tab">{{ key }}</a></li>
+   			{% endfor %}
+		</ul>
+		<div class="tab-content">			
+			{% for key, position in blocs %}
+			{% set loop_id = loop.index %}
+			{% set class = '' %}
+
+				{% if tab_id == 'null' %}
+					{% if loop.index == 1 %}
+						{% set class = 'active' %}
+					{% else %}
+						{% set class = '' %}
+					{% endif %}
+				{% else %}
+					{% if loop.index == tab_id %}
+						{% set class = 'active' %}
+					{% else %}
+						{% set class = '' %}
+					{% endif %}
+				{% endif %}
+				
+				<div class="tab-pane {{ class }}" id="tab{{ loop.index }}">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Name</th>
+								<th>Position</th>
+								<th colspan="4">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for bloc in position %}
+							<tr>
+								<td>{{ loop.index }}</td>
+								<td><a href="{{ path('edit_bloc', {'id': bloc.id } ) }}">{{ bloc.title }}</a></td>
+								<td>{{ bloc.position }}</td>
+								<td>
+									{% if not loop.first %}
+									<a href="{{ path('changeOrdre', {'bloc': bloc.id, 'sens': 'UP', 'tab_id': loop_id}) }}">
+										<img src="{{ asset("bundles/cafadmin/images/up.png") }}" alt="Vers le haut" />
+									</a>
+									{% endif %}
+								</td>
+								<td>
+									{% if not loop.last %}
+									<a href="{{ path('changeOrdre', {'bloc': bloc.id, 'sens': 'DOWN', 'tab_id': loop_id}) }}">
+										<img src="{{ asset("bundles/cafadmin/images/down.png") }}" alt="Vers le bas" />
+									</a>
+									{% endif %}
+								</td>
+								<td><a href="{{ path('edit_bloc', {'id': bloc.id } ) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a></td>
+								<td>
+									<a href="#myModal-{{ bloc.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+									<div class="modal hide" id="myModal-{{ bloc.id }}">
+										<div class="modal-header">
+									    	<button type="button" class="close" data-dismiss="modal">×</button>
+									    	<h3>Suppression du bloc</h3>
+									    </div>
+									    <div class="modal-body">
+									    	<p>Voulez-vous supprimer ce bloc ?</p>
+									    </div>
+									    <div class="modal-footer">
+									    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+									    	<a href="{{ path('remove_bloc', { 'id' : bloc.id }) }}" class="btn btn-primary">Oui</a>
+									    </div>
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% endfor %}
+		</div>
+    </div>
+
+{% endblock body %}

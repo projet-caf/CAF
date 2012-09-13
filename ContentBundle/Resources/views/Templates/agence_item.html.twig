@@ -1,0 +1,36 @@
+{#
+
+	params:
+		- cols : nombre de colonnes correspond ( ex: pour recuperer la bonne classe -> span{{cols}}0 )
+	
+#}
+
+{% set class = "middle_block span" ~ cols ~ "0 " ~ pos %}
+{% if pos != "left" and cols < 3 %}
+	{% set class = class ~ " border" %}
+{% endif %}
+<div class="{{ class }}">
+	<div class="article_gn">
+		
+		{% set image = '' %}
+		{% set desc = '' %}
+		{% set date = '' %}
+		{% for value in article.fieldsValue %}
+			{% if value.field.idFieldTaxonomy.name == 'Image' %}
+				{% set image = '<img src="' ~ asset(value.value.image) ~ '" alt="' ~ value.value.alt ~ '" title="' ~ value.value.title ~ '" class="img-left" />' %}
+			{% endif %}
+			{% if value.field.name == 'description_courte' %}
+				{% set desc = value.value %}
+			{% endif %}
+		{% endfor %}
+		
+		<div class="right-cat">
+			<h1 class="title_actu">{{ article.title|upper }}</h1>
+			<div class="clear"></div>
+			<div class="left-actu-cat">
+				{{ image|raw }}
+			</div>
+			{{ desc|raw }}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,14 @@
+{% extends "::admin.html.twig" %}
+{% block title "Metas" %}
+{% block titlesection "Metas" %}
+{% block body %}
+{% if id is not defined %}
+	<form action="{{ path('new_metas') }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('edit_metas', {'id' : id }) }}" method="post" {{ form_enctype(form) }}>
+{% endif %}			
+    {{ form_widget(form) }}
+    <a href="{{ path('metas') }}" class="btn">Fermer</a>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+{% endblock body %}

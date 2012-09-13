@@ -1,0 +1,17 @@
+{% extends "::admin.html.twig" %}
+{% block title "Champ" %}
+{% block titlesection "Champ" %}
+{% block action %}
+<a href="{{ path('fields') }}" class="btn"><i class="icon-chevron-left"></i> Retour</a>
+{% endblock %}
+{% block body %}
+{% if id is not defined %}
+	<form action="{{ path('new_field') }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('edit_field', {'id' : id }) }}" method="post" {{ form_enctype(form) }}>
+{% endif %}			
+    {{ form_widget(form) }}
+   <a href="{{ path('fields') }}" class="btn">Fermer</a>
+   <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+{% endblock body %}

@@ -1,0 +1,341 @@
+{% extends "::admin.html.twig" %}
+
+{% block stylesheets %}
+    {% stylesheets filter='cssrewrite' output='css/*.css'
+        'bundles/cafcrm/css/crmstyle.css'
+    %}
+       <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
+{% block title "CRM" %}
+
+{% block menu %}
+    
+{% endblock menu %}
+
+{% block titlesection %}
+        {{ formulaire.nomform }}
+{% endblock titlesection %}
+
+{% block body %}
+    {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            {{ app.session.flash('error') }}
+        </div>
+    {% elseif app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            {{ app.session.flash('success') }}
+        </div>    
+    {% endif %}
+    <form id="formulaireCRM" action="{{ path('save_HistoStatut', {'id' : id }) }}" method="post" {{ form_enctype(formHistoStatut) }}>   
+        <h2 class="titre_backgroundorange">Statut de la demande</h2>
+        <table>
+            <tr>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.statutDemande) }}</div></td>
+                <td>&nbsp;</td>
+                <td>{{ form_widget(formHistoStatut.statutDemande) }}</td>
+            </tr>    
+        </table>
+        <br />
+        <table cellpadding="5" width="76%">
+            <tr>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.agence) }}</div></td>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.daterdv) }}</div></td>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.conseiller) }}</div></td>
+            </tr>
+            <tr>
+                <td>{{ form_widget(formHistoStatut.agence) }}</td>
+                <td>{{ form_widget(formHistoStatut.daterdv) }}</td>
+                <td>{{ form_widget(formHistoStatut.conseiller) }}</td>
+            </tr>
+        </table>
+        <br />
+        <table cellpadding="5" class="detailstatut_gauche">        
+            <tr>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.dateEnvoi) }}</div></td>
+                <td>{{ form_widget(formHistoStatut.dateEnvoi) }}</td>
+            </tr>
+            <tr>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.racineCompte) }}</div></td>
+                <td>{{ form_widget(formHistoStatut.racineCompte) }}</td>
+            </tr>
+            <tr>
+                <td><div class="labelchamp"><label>Numéro de recommandation</label></div></td>
+                <td>{{ form_widget(formHistoStatut.caisseRegionale) }}&nbsp;{{ form_widget(formHistoStatut.agenceCaisseRegionale) }}&nbsp;{{ form_widget(formHistoStatut.numeroRecommandation) }}</td>
+            </tr>
+            <tr>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.commentaire) }}</div></td>
+                <td>{{ form_widget(formHistoStatut.commentaire) }}</td>
+            </tr>
+            <tr>
+                <td><div class="labelchamp">{{ form_label(formHistoStatut.langue) }}</div></td>
+                <td>{{ form_widget(formHistoStatut.langue) }}</td>
+            </tr>
+        </table>
+        <div class="detailstatut_right">
+                <div class="labelchamp">{{ form_label(formHistoStatut.provenanceDemande) }}</div>
+                {{ form_widget(formHistoStatut.provenanceDemande) }}
+                <br />
+                <div class="labelchamp"> {{ form_label(formHistoStatut.typeRecommandation) }}</div>
+                {{ form_widget(formHistoStatut.typeRecommandation) }}
+        </div>
+        <br class="clear"/>
+        <h4 class="historique">Historique des statuts de la demande</h4>
+
+        {% for histoStat in listeHistoStatut %}           
+            <a href="#myModalStatut-{{ histoStat.id }}" data-toggle="modal">
+                 {{ histoStat.dateStatutMAJ|date("Y/m/d G:i") }} - {{ histoStat.statutDemande.libelle }} {% if histoStat.user is not null %} -  {{ histoStat.user.firstname }} {{ histoStat.user.lastname }} {% endif %}
+            </a>
+                <div class="modal hide" id="myModalStatut-{{ histoStat.id }}">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="titre_historique">Statut : {{ histoStat.statutDemande.libelle }}</h4><br/>
+                        <table cellpadding="4" width="100%">
+                            <tr>
+                                <td>
+                                   <label class="labelchamp">Agence :</label> {{ histoStat.agence.nom }}
+                                </td> 
+                                <td>
+                                   <label class="labelchamp">Date du rendez-vous :</label>  {{ histoStat.daterdv|date("Y/m/d")}}
+                                </td> 
+                                <td>
+                                   {% if histoStat.conseiller is not null %} <label class="labelchamp">Conseiller :</label> {{histoStat.conseiller.nom }} {% else %} Pas de conseiller {% endif %}
+                                </td>    
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                   <label class="labelchamp">Date d'envoi du dossier :</label> {{ histoStat.dateEnvoi|date("Y/m/d") }}
+                                </td> 
+                                <td>
+                                   <label class="labelchamp">Racine compte :</label> {{ histoStat.racineCompte }}
+                                </td>    
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                   <label class="labelchamp">Numéro de recommandation :</label> {{ histoStat.caisseRegionale.numlabel }} &nbsp; {{ histoStat.agenceCaisseRegionale.numville }} &nbsp; {{ histoStat.numeroRecommandation }}
+                                </td>    
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                   <label class="labelchamp">Provenance demande :</label> {{ histoStat.provenanceDemande}}
+                                </td> 
+                                <td>
+                                  <label class="labelchamp">Type de recommandation :</label> {{ histoStat.typeRecommandation }}
+                                </td>    
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                   <label class="labelchamp">Commentaire :</label> {{ histoStat.commentaire }}
+                                </td>    
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    {% if histoStat.langue is not null %} <label class="labelchamp">Langue :</label> {{ histoStat.langue.name }} {% endif %}
+                                </td>    
+                            </tr>
+                        </table> 
+                       
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn" data-dismiss="modal">Ok</a>
+                       
+                    </div>
+                </div>
+            <br />
+        {% endfor %}
+        {% if listeHistoStatut is empty  %}
+            Aucun historique des statuts de la demande
+        {% endif %}
+        <br class="clear"/><br />
+    </form>
+        <h2 class="titre_backgroundorange">Envoi d'email</h2>
+        <form action="{{ path('save_HistoTypeEmail', {'id' : id }) }}" method="post" {{ form_enctype(formHistoEmail) }}>  
+            <table cellpadding="5">
+                <tr>            
+                    <td><div class="labelchamp">{{ form_label(formHistoEmail.typeEmail) }}</div></td> 
+                    <td>&nbsp;&nbsp;</td>           
+                    <td><div class="labelchamp">{{ form_label(formHistoEmail.emailEnvoyeur) }}</div></td>
+                    <td colspan="2"> 
+                        <div class="controls">
+                            <div class="input-prepend">
+                            <span class="add-on"><i class="icon-envelope"></i></span>
+                            {{ form_widget(formHistoEmail.emailEnvoyeur) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ form_widget(formHistoEmail.typeEmail) }}</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td><div class="labelchamp">{{ form_label(formHistoEmail.emailClient) }}</div></td>
+                    <td colspan="2">
+                        <div class="controls">
+                            <div class="input-prepend">
+                            <span class="add-on"><i class="icon-envelope"></i></span>
+                            {{ form_widget(formHistoEmail.emailClient) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><div class="labelchamp">{{ form_label(formHistoEmail.sujet) }}</div></td>
+                    <td colspan="2">{{ form_widget(formHistoEmail.sujet) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><div class="labelchamp">{{ form_label(formHistoEmail.message) | raw }}</div></td>
+                    <td>{{ form_widget(formHistoEmail.message) }} </td>
+                    <td valign="bottom"> 
+                        <a id="previewemail" href="#myModal-{{ formulaire.currentTypeEmail.id }}" data-toggle="modal" class="btn">Envoyer</a>
+                        <div class="modal hide" id="myModal-{{ formulaire.currentTypeEmail.id }}">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                <h3>Preview Email</h3>
+                            </div>
+                            <div class="modal-body">
+                                <table cellpadding="4" width="100%">
+                                    <tr>
+                                        <td>Expéditeur :</td>
+                                        <td><span id="emailenvoyeur">{{ formulaire.currentTypeEmail.emailEnvoyeur }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pour :</td>
+                                        <td><span id="emailclient">{{ formulaire.currentTypeEmail.emailClient }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sujet :</td>
+                                        <td><span id="emailsujet">{{ formulaire.currentTypeEmail.sujet }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><div id="emailmessage"></div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="#" class="btn" data-dismiss="modal">Annuler</a>
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <h4 class="historique">Historique des emails</h4>
+        {% for histoEmail in listeHistoEmail %}
+            
+            <a href="#myModalEmail-{{ histoEmail.id }}" data-toggle="modal">
+                 {{ histoEmail.dateEnvoi|date("Y/m/d G:i") }} - {{ histoEmail.typeEmail.type }} {% if histoEmail.user is not null %} -  {{ histoEmail.user.firstname }} {{ histoEmail.user.lastname }} {% endif %}
+            </a>
+                <div class="modal hide" id="myModalEmail-{{ histoEmail.id }}">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="titre_historique">Type : {{ histoEmail.typeEmail.type }}</h4><br/>
+                         <table cellpadding="4" width="100%">
+                            <tr>
+                                <td>Date d'envoi :</td>
+                                <td>{{ histoEmail.dateEnvoi|date("Y/m/d G:i") }}</td>
+                            </tr>
+                            <tr>
+                                <td>Expéditeur :</td>
+                                <td>{{ histoEmail.emailEnvoyeur }}</td>
+                            </tr>
+                            <tr>
+                                <td>Pour :</td>
+                                <td>{{ histoEmail.emailClient }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sujet :</td>
+                                <td>{{ histoEmail.sujet }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">{{ histoEmail.message | raw}}</td>
+                            </tr>
+                        </table>                        
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn" data-dismiss="modal">Ok</a>                   
+                    </div>
+                </div>
+            <br />
+        {% endfor %}
+        {% if listeHistoEmail is empty %}
+            Aucun historique d'email
+        {% endif %}
+        <br class="clear"/><br />
+        <button type="submit" class="btn" id='submitformcrm'>Enregistrer</button>
+{% endblock body %}
+
+{% block script %}
+<script type="text/javascript">
+    $(function() {
+        $("form input.date").datepicker({
+            dateFormat: 'dd/mm/yy',
+            buttonImage: '{{asset("bundles/cafcrm/images/calendar.png")}}',
+            buttonImageOnly: true,
+            showOn: "button",
+            clickInput:true,
+            firstDay:1
+        });
+
+        jQuery('#submitformcrm').click(function(){
+           jQuery("#formulaireCRM").submit(); 
+        });
+
+        jQuery('#previewemail').click(function(){ 
+            var mess= CKEDITOR.instances["HistoEmail_message"].getData();
+            if($('#HistoEmail_emailEnvoyeur').val()!='' && $('#HistoEmail_emailClient').val()!='' && mess!='' && $('#HistoEmail_sujet').val()!=''){
+                $("#emailenvoyeur").text($('#HistoEmail_emailEnvoyeur').val());
+                $("#emailclient").text($('#HistoEmail_emailClient').val());
+                $("#emailsujet").text($('#HistoEmail_sujet').val());
+               
+                $("#emailmessage").html(mess);
+            }
+            else{
+                alert("Veuillez remplir tous les champs avant d'envoyer l'email");
+                return false;
+            }
+            
+        });
+
+        jQuery("#HistoEmail_typeEmail").change(function(){
+            var idtypeemail = 'idtypeemail='+$("#HistoEmail_typeEmail").val();
+            
+            $.ajax({
+                type: "POST",
+                url: "{{ path('get_contentmail')}}",
+                data: idtypeemail,
+                cache: false,
+                success: function(data){
+                   CKEDITOR.instances["HistoEmail_message"].setData(data);
+                }
+            });                
+        })
+
+        jQuery("#HistoStatut_caisseRegionale").change(function(){
+            var idcaisseregionale = 'idcaisseregionale='+$("#HistoStatut_caisseRegionale").val();
+            $.ajax({
+                type: "POST",
+                url: "{{ path('get_agenceregionale')}}",
+                data: idcaisseregionale,
+                cache: false,
+                success: function(data){
+                    var newOptions = data;                    
+                    $("#HistoStatut_agenceCaisseRegionale option").remove();
+                    $("#HistoStatut_agenceCaisseRegionale").append(newOptions);
+                }
+            });    
+        })
+    })
+</script>
+{% endblock script %}

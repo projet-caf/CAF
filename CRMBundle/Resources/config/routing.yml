@@ -1,0 +1,3 @@
+CAFCRMBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: CAFCRMBundle:Default:index }

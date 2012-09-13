@@ -1,0 +1,18 @@
+{#
+
+	params:
+		- cols : nombre de colonnes correspond ( ex: pour recuperer la bonne classe -> span{{cols}}0 )
+	
+#}
+
+{% set class = cols %}
+<div class="middle_block span{{cols}}0 border">
+	<div class="article_gn">
+		<h1>{{ article.title }}</h1>
+		{% for value in article.fieldsValue %}
+			{% if value.field.name == 'description' %}
+				{{ value.value|raw }}
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>

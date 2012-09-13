@@ -1,0 +1,340 @@
+{% extends "::admin.html.twig" %}
+
+{% block title "Entrées de menu" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Entrées de menu" %}
+{% block action %}
+	<a href="{{ path('menus_taxonomy') }}" class="btn"><i class="icon-chevron-left"></i> Retour</a>
+{% endblock action %}
+
+{% block body %}
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+<form action="{{ path('action_menu', { 'menu': menu, 'nb_elem': nb_elem }) }}" id="fields-form" method="post">
+<div class="tabbable" id="myTabs" style="margin-bottom: 18px;">
+	    <ul class="nav nav-tabs">
+	        <li class="">
+	            <a href="#fr" id="a-fr" class="tabs" data-toggle="tab">Français</a>
+	        </li>
+	        <li class="">
+	            <a href="#en" id="a-en" class="tabs" data-toggle="tab">English</a>
+	        </li>
+	        <li class="">
+	            <a href="#de" id="a-de" class="tabs" data-toggle="tab">Deutsch</a>
+	        </li>
+		</ul>
+		<div class="tab-content">    
+    		<div class="tab-pane" id="fr">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th><input id="selectallcheckbox_fr" type="checkbox" name="selectallcheckbox" /></th>
+							<th>Entrée</th>
+							<th>Etat</th>
+							<th colspan="2" width="8%">Ordre</th>
+							<th colspan="2">Traductions</th>
+							<th colspan="2" width="8%">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for entry in entries_fr %}
+						<tr>
+							<td>{{ entry.id }}</td>
+							<td><input class="listcheckbox_fr" type="checkbox" value="{{ entry.id }}" name="listid[]" ></td>
+							<td>
+								<span class="left-{{ entry.level }}"><a href="{{ path('edit_entry', {'id': entry.id, 'menu_taxonomy': menu }) }}">{{ entry.title }}</a></span>
+							</td>
+							<td>
+								{% if entry.published %}
+									<a href="javascript:" onclick="publish({{ entry.id }},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ entry.id }}" rel="tooltip" title="Publié" /></a>
+								{% else %}
+									<a href="javascript:" onclick="publish({{ entry.id }},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ entry.id }}" rel="tooltip" title="Non publié" /></a>
+								{% endif %}
+							</td>
+							<td>
+								{% if not loop.first and entry.id != entry.root %}
+								<a href="{{ path('changeOrdreMenu', {'menu_taxonomy': menu, 'entry': entry.id, 'sens': 'UP', 'nb_elem': nb_elem}) }}">
+									<img src="{{ asset("bundles/cafadmin/images/up.png") }}" alt="Vers le haut" />
+								</a>
+								{% endif %}
+							</td>
+							<td>
+								{% if not loop.last and entry.id != entry.root %}
+								<a href="{{ path('changeOrdreMenu', {'menu_taxonomy': menu, 'entry': entry.id, 'sens': 'DOWN', 'nb_elem': nb_elem}) }}">
+									<img src="{{ asset("bundles/cafadmin/images/down.png") }}" alt="Vers le bas" />
+								</a>
+								{% endif %}
+							</td>
+							<td>
+                                                                {% if dataTranslationExists[entry.id]["en_us"] is not defined %}
+                                                                    <a href="{{ path('new_translation', {'id': entry.id,'menu_taxonomy': menu, 'lang': 'en_us', 'nb_elem': nb_elem}) }}" title="Ajouter une traduction">en</a>
+                                                                {% endif %}
+                                                        </td>
+							<td>								
+                                                                {% if dataTranslationExists[entry.id]["de_de"] is not defined %}
+                                                                  <a href="{{ path('new_translation', {'id': entry.id,'menu_taxonomy': menu, 'lang': 'de_de', 'nb_elem': nb_elem}) }}"  title="Ajouter une traduction">de</a>
+                                                                {% endif %}                                                     
+                                                        </td>
+							<td>
+								<a href="{{ path('edit_entry', {'id': entry.id, 'menu_taxonomy': menu }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+							</td>
+							<td>
+								<a href="#myModal-{{ entry.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+								<div class="modal hide" id="myModal-{{ entry.id }}">
+									<div class="modal-header">
+								    	<button type="button" class="close" data-dismiss="modal">×</button>
+								    	<h3>Suppression du menu ?</h3>
+								    </div>
+								    <div class="modal-body">
+								    	<p>Voulez-vous supprimer ce menu ?</p>
+								    </div>
+								    <div class="modal-footer">
+								    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+								    	<a href="{{ path('delete_entry', { 'id' : entry.id, 'menu_query': menu }) }}" class="btn btn-primary">Oui</a>
+								    </div>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="en">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th><input id="selectallcheckbox_en" type="checkbox" name="selectallcheckbox" /></th>
+							<th>Entrée</th>
+							<th>Etat</th>
+							<th colspan="2">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for entry in entries_en %}
+						{% if entry.title != '' %}
+						<tr>
+							<td>{{ entry.id }}</td>
+							<td><input class="listcheckbox_en" type="checkbox" value="{{ entry.id }}" name="listid[]" ></td>
+							<td>
+								<span class="left-{{ entry.level }}"><a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'en_us' }) }}">{{ entry.title }}</a></span>
+							</td>
+							<td>
+								{% if entry.published %}
+									<a href="javascript:" onclick="publish({{ entry.id }},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ entry.id }}" rel="tooltip" title="Publié" /></a>
+								{% else %}
+									<a href="javascript:" onclick="publish({{ entry.id }},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ entry.id }}" rel="tooltip" title="Non publié" /></a>
+								{% endif %}
+							</td>
+							<td>
+								<a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'en_us' }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+							</td>
+							<td>
+								<a href="#myModal-{{ entry.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+								<div class="modal hide" id="myModal-{{ entry.id }}">
+									<div class="modal-header">
+								    	<button type="button" class="close" data-dismiss="modal">×</button>
+								    	<h3>Suppression du menu ?</h3>
+								    </div>
+								    <div class="modal-body">
+								    	<p>Voulez-vous supprimer ce menu ?</p>
+								    </div>
+								    <div class="modal-footer">
+								    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+								    	<a href="{{ path('delete_entry', { 'id' : entry.id, 'menu_query': menu }) }}" class="btn btn-primary">Oui</a>
+								    </div>
+								</div>
+							</td>
+						</tr>
+						{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="de">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th><input id="selectallcheckbox_de" type="checkbox" name="selectallcheckbox" /></th>
+							<th>Entrée</th>
+							<th>Etat</th>
+							<th colspan="2">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for entry in entries_de %}
+						{% if entry.title != '' %}
+						<tr>
+							<td>{{ entry.id }}</td>
+							<td><input class="listcheckbox_de" type="checkbox" value="{{ entry.id }}" name="listid[]" ></td>
+							<td>
+								<span class="left-{{ entry.level }}"><a href="{{ path('edit_entry', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'de_de' }) }}">{{ entry.title }}</a></span>
+							</td>
+							<td>
+								{% if entry.published %}
+									<a href="javascript:" onclick="publish({{ entry.id }},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ entry.id }}" rel="tooltip" title="Publié" /></a>
+								{% else %}
+									<a href="javascript:" onclick="publish({{ entry.id }},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ entry.id }}" rel="tooltip" title="Non publié" /></a>
+								{% endif %}
+							</td>
+							<td>
+								<a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'de_de' }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+							</td>
+							<td>
+								<a href="#myModal-{{ entry.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+								<div class="modal hide" id="myModal-{{ entry.id }}">
+									<div class="modal-header">
+								    	<button type="button" class="close" data-dismiss="modal">×</button>
+								    	<h3>Suppression du menu ?</h3>
+								    </div>
+								    <div class="modal-body">
+								    	<p>Voulez-vous supprimer ce menu ?</p>
+								    </div>
+								    <div class="modal-footer">
+								    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+								    	<a href="{{ path('delete_entry', { 'id' : entry.id, 'menu_query': menu }) }}" class="btn btn-primary">Oui</a>
+								    </div>
+								</div>
+							</td>
+						</tr>
+						{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		{% include "::toolbar.html.twig" %}
+	</div>
+</form>
+{% endblock body %}
+{% block script %}
+	<script type="text/javascript">
+		$(function() {
+			{% if app.request.get('lang') == '' %}
+				{% set lang = 'fr' %}
+			{% else %}	
+				{% set lang = app.request.get('lang') %}
+			{% endif %}	
+			$("#mytabs li a#a-{{ lang }}").tab('show');
+		
+		});
+
+		function publish(id, state) {
+		$.ajax({
+			url: '{{ path('publish_menutranslation') }}',
+			data: 'id='+id+'&state='+state,
+			success: function(data) {
+				if(state == 1) {
+					$('#field_'+id).parent('a').attr('onclick','publish('+id+',0)');
+					$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/tick.png") }}");
+				} else {
+					$('#field_'+id).parent('a').attr('onclick','publish('+id+',1)');
+					$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/block.png") }}");
+				}
+			}
+		});
+	}
+
+	$(function() {
+		$('a').hover(function() {
+			$(this).tooltip('show');
+		})
+
+		$("#submitchoix").click(function()
+		{		
+			//$(".listcheckbox").prop("checked", true);
+			var coche=false;
+			$(".listcheckbox_fr").each(function(){
+				var item = $(this);
+				if(item.is(":checked")){
+					coche=true;
+				}
+			});
+
+			$(".listcheckbox_en").each(function(){
+				var item = $(this);
+				if(item.is(":checked")){
+					coche=true;
+				}
+			});
+
+			$(".listcheckbox_de").each(function(){
+				var item = $(this);
+				if(item.is(":checked")){
+					coche=true;
+				}
+			});
+
+			if($('#selectaction').val()==0){
+				alert("Veuillez sélectionner une action");
+				return false;
+			}
+
+			if(!coche){
+				alert("Aucune entrée de menu n'a été sélectionnée");
+				return false;
+			} else {
+				$("fields-form").submit();
+			}
+		});
+
+		$("#selectallcheckbox_fr").click(function(){
+		    var coche = this.checked;
+	        $(".listcheckbox_fr").each(function(){
+				var item = $(this);
+				if(coche){
+					item.attr('checked', true);
+				}
+				else{
+					item.attr('checked', false);
+				}
+			});
+		});
+
+		$("#selectallcheckbox_en").click(function(){
+		    var coche = this.checked;
+	        $(".listcheckbox_en").each(function(){
+				var item = $(this);
+				if(coche){
+					item.attr('checked', true);
+				}
+				else{
+					item.attr('checked', false);
+				}
+			});
+		});
+
+		$("#selectallcheckbox_de").click(function(){
+		    var coche = this.checked;
+	        $(".listcheckbox_de").each(function(){
+				var item = $(this);
+				if(coche){
+					item.attr('checked', true);
+				}
+				else{
+					item.attr('checked', false);
+				}
+			});
+		});
+	});
+
+		function submitPagination() {
+			$('#pagination').append('<input type="hidden" name="selectaction" value="pagination" />');
+			$('#fields-form').submit();
+		}
+	</script>
+{% endblock script %}		

@@ -1,0 +1,36 @@
+<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Title</th>
+				<th>Date de création</th>
+				<th>Date de modification</th>
+				<th colspan="3">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for formulaire in formulaires %}
+		<tr>			
+			<td>{{ formulaire.id }}</td>
+			<td>{{ formulaire.title }}</td>
+			<td>{{ formulaire.created|date('d/m/Y') }}</td>
+			<td>{{ formulaire.updated|date('d/m/Y')  }}</td>			
+			<td><a href="{{ path('edit_formulaire', { 'id' : formulaire.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+			<td><a href="#myModal-{{ formulaire.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+			<div class="modal hide" id="myModal-{{ formulaire.id }}">
+				<div class="modal-header">
+			    	<button type="button" class="close" data-dismiss="modal">×</button>
+			    	<h3>formulaire.title</h3>
+			    </div>
+			    <div class="modal-body">
+			    	<p>Voulez-vous supprimer ce formulaire ?</p>
+			    </div>
+			    <div class="modal-footer">
+			    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+			    	<a href="{{ path('delete_formulaire', { 'id' : formulaire.id }) }}" class="btn btn-primary">Oui</a>
+			    </div>
+			</div>
+			</td>	
+		</tr>
+		{% endfor %}
+</table>

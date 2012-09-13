@@ -1,0 +1,50 @@
+{% extends "::base.html.twig" %}
+{% block stylesheets %}
+{% stylesheets filter='cssrewrite' output='css/*.css'
+    'bundles/cafadmin/css/bootstrap.css'
+    'bundles/cafadmin/css/bootstrap-responsive.css'
+    'bundles/cafadmin/css/style.css'
+%}
+   <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+{% endstylesheets %}
+{% endblock stylesheets %}
+{% block title "Login" %}
+{% block body %}
+<body class="login">
+<div class="row">
+	<div class="container">
+		<div class="span4 offset4">
+		<div class="hero-unit white">
+		{% if error %}
+    		<div class="alert alert-error">
+				<button class="close" data-dismiss="alert" type="button">×</button>
+				{{ error.message }}
+			</div>
+		{% endif %}
+		<form action="{{ path('login_check') }}" method="post">
+			<ul class="unstyled">
+    			<li>
+					<label for="username">Username:</label>
+    				<input type="text" id="username" name="_username" value="{{ last_username }}" />
+				</li>	
+				<li>
+    				<label for="password">Password:</label>
+    				<input type="password" id="password" name="_password" />
+				</li>
+				<li>	
+    				<input type="submit" name="login" class="btn btn-primary" value="Valider" />
+				</li>	
+			</ul>	
+		</form>
+		</div>
+		</div>
+	</div>
+</div>
+{% javascripts
+    'bundles/cafadmin/js/jquery.js'
+    'bundles/cafadmin/js/bootstrap-transition.js'
+    'bundles/cafadmin/js/bootstrap-alert.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}	
+{% endblock body %}

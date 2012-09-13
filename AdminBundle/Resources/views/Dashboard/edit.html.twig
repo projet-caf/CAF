@@ -1,0 +1,16 @@
+{% extends "::admin.html.twig" %}
+{% block title "Redirections" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Redirections" %}
+
+{% block body %}
+	<form action="{{ path('edit_redirect', {'id' : id }) }}" method="post" {{ form_enctype(form) }}>	
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+    <button type="submit">Valider</button>
+</form>
+{% endblock body %}

@@ -1,0 +1,66 @@
+<div class="header">
+	<div class="lft_top_side">
+		<div class="head_top">
+			<div class="head">
+				<div class="logo">
+				</div>
+				<div class="search">
+					<div class="lang_navi padding5">
+		                <ul>
+	    					<li><a href="#" title="" class="first">FR</a></li>
+	    					<li><a href="#" title="">EN</a></li>
+	    					<li><a href="#" title="">DE</a></li>
+	    				</ul>
+		        	</div>
+		        	<input type="submit" id="search_button" class="research_button" value=" "/>
+		        	<input type="text" id="search" class="research" name="search" value="Recherche" />
+				</div>
+			</div>
+
+			{% if(display_menu) %}
+				{% set class = '20' %}	
+				{% render "CAFFrontBundle:Module:generateBloc" with {'position': "top", 'unique':1, 'lang':lang, 'cat_id':cat_id, 'item_id':item_id, 'country': country, 'cats': cats} %}				
+		    {% else %}
+		    	{% set class = '10' %}
+	        {% endif %}
+	    </div>
+		<div class="btm_head">
+	    </div>
+	</div>
+
+	<div class="rgt_top_side rgt{{class}}">
+		<div class="org_virg virg{{class}}">
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+	var config = {
+	    over: makeTall, 
+	    timeout: 200, 
+	    out: makeShort 
+	};
+	$(".top_navi li").children('div.submenu').hide();
+	$("li.lvl_1").children('ul').hide();
+	$(".top_navi li.parent").hoverIntent(config);
+	$("li.lvl_1").mouseover(function(){
+		$("li.lvl_1").children('ul').hide();
+		$(this).children('ul').show();
+	});
+	/*$("li.lvl_1").mouseout(function(){
+		//$(this).children('ul').hide();
+	});*/
+})
+
+function makeTall() {
+    jQuery(this).children("div").slideDown("fast", function(){});
+}
+
+function makeShort() {
+    jQuery(this).children("div").slideUp("fast", function(){});
+}
+
+</script>

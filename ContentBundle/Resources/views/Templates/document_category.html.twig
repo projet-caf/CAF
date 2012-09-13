@@ -1,0 +1,42 @@
+{#
+
+	params:
+		- cols : nombre de colonnes correspond ( ex: pour recuperer la bonne classe -> span{{cols}}0 )
+	
+#}
+
+{% set class = "middle_block span" ~ cols ~ "0 " ~ pos %}
+{% if pos != "left" and cols < 3 %}
+	{% set class = class ~ " border" %}
+{% endif %}
+<div class="{{ class }}">
+	<div class="article_gn">
+			<h1>{{ category.title|upper }}</h1>
+			{% set media = '' %}
+			{% set short_desc = '' %}
+			{% for article in category.contents %}
+				{% if article.lang.code == lang %}
+					{% for value in article.fieldsValue %}
+						{% if value.field.idFieldTaxonomy.name == 'Image' %}
+							{% set media = value.value %}
+						{% endif %}
+						{% if value.field.name == 'description_courte' %}
+							{% set short_desc = value.value %}
+						{% endif %}
+					{% endfor %}
+					<div class="left-doc-cat">
+						<a href="{{ path('front', {'lang': lang, 'country': country, 'url': article.contentUrls.0.url }) }}">
+							<img src="{{ asset('bundles/caffront/images/picto-pdf.png') }}" alt="{{ article.title }}" title="{{ article.title }}" class="img-left" />
+						</a>
+					</div>
+					<div class="right-cat">
+						<h2>{{ article.title }}</h2>
+						{{ short_desc|raw }}<a href="{{ path('front', {'lang': lang, 'country': country, 'url': article.contentUrls.0.url }) }}">[...]</a>
+					</div>
+				{% endif %}
+				<div class="clear"></div>
+				<div class="sep"></div>
+			{% endfor %}
+		
+	</div>
+</div>

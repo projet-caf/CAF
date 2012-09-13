@@ -1,0 +1,46 @@
+
+{% set class = cols %}
+<div class="middle_block span{{cols}}0 border">
+	<div class="article_gn">
+		{% if article is not null %}
+			<h1>{{ article.title }}</h1>
+			{% for value in article.fieldsValue %}
+				{% if value.field.idFieldTaxonomy.name == 'Image' %}
+					<img src="{{ asset(value.value.image) }}" alt="{{ value.value.alt }}" title="{{ value.value.title }}" class="img-left" />
+				{% endif %}
+				{% if value.field.name == 'corps-texte' %}
+					{{ value.value|raw }}
+				{% endif %}
+			{% endfor %}
+			<p>Date de publication : <em>{{ article.created|date('d/m/Y') }}</em></p>
+		{% else %}
+			<h1>{{ category.title }}</h1>
+			{% set media = '' %}
+			{% set short_desc = '' %}
+			{% for article in category.category.contents %}
+				{% if article.lang.code == lang %}
+					{% for value in article.fieldsValue %}
+						{% if value.field.idFieldTaxonomy.name == 'Image' %}
+							{% set media = value.value %}
+						{% endif %}
+						{% if value.field.name == 'description_courte' %}
+							{% set short_desc = value.value %}
+						{% endif %}
+					{% endfor %}
+					<div class="left-cat">
+						<a href="{{ path('front', {'lang': lang, 'country': country, 'categoryTranslation': category.alias, 'contentTranslation': article.alias }) }}">
+							<img src="{{ asset(media.image) }}" alt="{{ media.alt }}" title="{{ media.title }}" class="img-left" />
+						</a>
+					</div>
+					<div class="right-cat">
+						{{ article.created|date('d/m/Y') }}
+						<h2>{{ article.title }}</h2>
+						{{ short_desc|raw }}<a href="{{ path('front', {'lang': lang, 'country': country, 'categoryTranslation': category.alias, 'contentTranslation': article.alias }) }}">[...]</a>
+					</div>
+				{% endif %}
+				<div class="clear"></div>
+			{% endfor %}
+		{% endif %}
+		
+	</div>
+</div>

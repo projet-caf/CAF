@@ -1,0 +1,31 @@
+{% extends "::admin.html.twig" %}
+{% block title "Agence caisse régionale" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection %}
+    {% if id is defined %}
+        Editer l'agence caisse régionale
+    {% else %}
+        Nouvelle agence caisse régionale
+    {% endif %} 
+{% endblock titlesection %}
+
+{% block body %}
+{% if id is defined %}
+	<form action="{{ path('edit_agenceCaisseRegionale', {'id' : id }) }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('new_agenceCaisseRegionale') }}" method="post" {{ form_enctype(form) }}>
+{% endif %}		
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+
+    {% if id is defined %}
+    	<button type="submit" class="btn">Edit</button>
+    {% else %}
+    	<button type="submit" class="btn">Create</button>
+    {% endif %}		
+</form>
+{% endblock body %}

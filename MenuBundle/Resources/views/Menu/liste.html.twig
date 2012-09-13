@@ -1,0 +1,5 @@
+{% block body %}
+{% for child in children %}
+	<option value="{{ child.id }}">{{ child.translations.0.name }}</option>
+{% endfor %}	
+{% endblock body %}

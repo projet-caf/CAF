@@ -1,0 +1,21 @@
+{#
+
+	params:
+		- cols : nombre de colonnes correspond ( ex: pour recuperer la bonne classe -> span{{cols}}0 )
+	
+#}
+
+{% set class = "middle_block span" ~ cols ~ "0 " ~ pos %}
+{% if pos != "left" and cols < 3 %}
+	{% set class = class ~ " border" %}
+{% endif %}
+<div class="{{ class }}">
+	<div class="article_gn">
+		<h1>{{ article.title }}</h1>
+		{% for value in article.fieldsValue %}
+			{% if value.field.name == 'description' %}
+				{{ value.value|raw }}
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>

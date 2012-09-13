@@ -1,0 +1,98 @@
+{% extends "::admin.html.twig" %}
+{% block title "Catégorie" %}
+{% block titlesection "Catégorie" %}
+{% block body %}
+<div class="modal" id="myModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>Chargement...</h3>
+    </div>
+    <div class="modal-body">
+        <img src="{{ asset('bundles/cafadmin/images/ajax-loader.gif') }}" alt=""> 
+    </div>
+    <div class="modal-footer">
+       
+    </div>
+</div>
+<div class="modal-backdrop in"></div> 
+{% if id is not defined %}
+    <form action="{{ path('new_category') }}" method="post" enctype="multipart/form-data">
+{% else %}
+    <form action="{{ path('edit_category', {'id' : id }) }}" method="post" enctype="multipart/form-data">
+{% endif %}
+{{ form_row(form_fr.parent) }}
+{{ form_row(form_fr.ordre) }}
+{{ form_row(form_fr.template) }}
+<div class="tabbable" id="myTabs" style="margin-bottom: 18px;">
+    <ul class="nav nav-tabs">
+        <li class="">
+            <a href="#fr" id="a-fr" class="tabs" data-toggle="tab">Français</a>
+        </li>
+        <li class="">
+            <a href="#en" id="a-en" class="tabs" data-toggle="tab">English</a>
+        </li>
+        <li class="">
+            <a href="#de" id="a-de" class="tabs" data-toggle="tab">Deutsch</a>
+        </li>
+</ul>
+			
+    
+    
+<div class="tab-content">    
+    <div class="tab-pane" id="fr">
+        <div class="span8">
+            {{ form_row(form_fr.translationFr) }}
+        </div>
+        <div class="span4">
+            <div class="well">
+                {{ form_row(form_fr.metasValuesFr) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="tab-pane" id="en">
+        <div class="span8">
+           	{{ form_row(form_en.translationEn) }}
+        </div>
+        <div class="span4">
+            <div class="well">
+                {{ form_row(form_en.metasValuesEn) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="tab-pane" id="de">
+        <div class="span8">
+           	{{ form_row(form_de.translationDe) }}
+        </div>
+        <div class="span4">
+            <div class="well">
+            	{{ form_row(form_de.metasValuesDe) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>   
+    <div class="buttons">
+        <a href="{{ path('categories') }}" class="btn">Fermer</a>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>    
+    </div>
+</form>
+{% endblock body %}
+{% block script %}
+<script>
+
+$(document).ready(function() {
+    $('#myModal').hide();
+    $('.modal-backdrop').hide();
+    {% if app.request.get('lang') == '' %}
+        {% set lang = 'fr' %}
+    {% else %}  
+        {% set lang = app.request.get('lang') %}
+    {% endif %} 
+    $("#mytabs li a#a-{{ lang }}").tab('show');
+    
+
+});
+</script>
+{% endblock script %}

@@ -1,0 +1,122 @@
+{% extends "::admin.html.twig" %}
+{% block title "Dashboard" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+{% block titlesection "Dashboard" %}
+
+{% block body %}
+<div class="row">
+	<div class="span12">
+		<div class="thumbnails">
+			<div class="span3"></div>
+			<div class="span2 thumbnail">
+				<a href="{{ path('content') }}"><img src="{{ asset('bundles/cafadmin/images/articles.png') }}" /></a>
+				<div class="caption">
+					<h5>Gestion des articles</h5>
+				</div>
+			</div>
+			<div class="span2 thumbnail">
+				<a href="{{ path('new_content') }}"><img src="{{ asset('bundles/cafadmin/images/new_article.png') }}" /></a>
+				<div class="caption">
+					<h5>Ajouter un article</h5>
+				</div>
+			</div>
+			<div class="span2 thumbnail">
+				<a href="{{ path('categories') }}"><img src="{{ asset('bundles/cafadmin/images/folder.png') }}" /></a>
+				<div class="caption">
+					<h5>Gestion des catégories</h5>
+				</div>
+			</div>
+			<div class="span3"></div>
+		</div>
+	</div>
+</div>	
+<div class="row">
+	<div class="span12">
+		<div class="thumbnails">
+			<div class="span3"></div>
+			<div class="span2 thumbnail">
+				<a href="{{ path('banner') }}"><img src="{{ asset('bundles/cafadmin/images/folder.png') }}" /></a>
+				<div class="caption">
+					<h5>Gestion des bannières</h5>
+				</div>
+			</div>
+			<div class="span2 thumbnail">
+				<a href="{{ path('content') }}"><img src="{{ asset('bundles/cafadmin/images/medias.png') }}" /></a>
+				<div class="caption">
+					<h5>Gestion des médias</h5>
+				</div>
+			</div>
+			<div class="span2 thumbnail">
+				<a href="{{ path('users') }}"><img src="{{ asset('bundles/cafadmin/images/folder.png') }}" /></a>
+				<div class="caption">
+					<h5>Gestion des utilisateurs</h5>
+				</div>
+			</div>
+			<div class="span3"></div>
+		</div>
+	</div>
+</div>
+</div>
+<div class="clearfix"></div>
+<hr class="soften">
+<div class="span12">
+	<div class="row">
+		<div class="span6">
+			<h2>Derniers articles</h2>
+			<table class="table table-striped">
+				{% for article in articles %}
+					<tr>
+						{% for translation in article.translations %}
+							{% if translation.lang.code == 'fr' %}
+								<td>{{ translation.title }} - {{ translation.updated|date('d/m/Y') }}</td>
+								<td>
+									<a href="{{ path('edit_content', {'id': article.id }) }}"><img src="{{ asset('bundles/cafadmin/images/pencil.png') }}" /></a> 
+									<a href="#myModal-{{ article.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+									<div class="modal hide" id="myModal-{{ article.id }}">
+										<div class="modal-header">
+									    	<button type="button" class="close" data-dismiss="modal">×</button>
+									    	<h3>{{ article.translations.0.title }}</h3>
+									    </div>
+									    <div class="modal-body">
+									    	<p>Voulez-vous supprimer ce contenu ?</p>
+									    </div>
+									    <div class="modal-footer">
+									    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+									    	<a href="{{ path('delete_content', { 'id' : article.id }) }}" class="btn btn-primary">Oui</a>
+									    </div>
+									</div>
+								</td>
+							{% endif %}
+						{% endfor %}
+					</tr>
+				{% endfor %}	
+			</table>
+		</div>
+		<div class="span6">
+			<h2>Rapport d'erreur</h2>
+			<table class="table table-striped">
+				{% for redirect in redirects %}
+					{% if loop.index < 6 %}
+						<tr>
+							<td>{{ redirect.id }}</td>
+							<td>{{ redirect.source|slice(0,30) }}</td>
+							<td>{{ redirect.statuscode }}</td>
+							<td>{{ redirect.count }}</td>
+							<td>{{ redirect.lastaccessed|date('d/m/Y') }}</td>
+							<td>
+								<a href="{{ path("edit_redirect", {'id': redirect.id} ) }}">
+									<img src="{{ asset('bundles/cafadmin/images/pencil.png') }}" alt="" />
+								</a>
+							</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</div>
+<div class="clearfix"></div>
+{% endblock body %}

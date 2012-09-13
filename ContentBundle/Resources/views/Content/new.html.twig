@@ -1,0 +1,102 @@
+{% extends "::admin.html.twig" %}
+{% block title "Contenu" %}
+{% block titlesection "Contenu" %}
+{% block action %}
+<a href="{{ path('content') }}" class="btn"><i class="icon-chevron-left"></i> Retour</a>
+{% endblock %}
+{% block body %}
+<div class="modal" id="myModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>Chargement...</h3>
+    </div>
+    <div class="modal-body">
+        <img src="{{ asset('bundles/cafadmin/images/ajax-loader.gif') }}" alt=""> 
+    </div>
+    <div class="modal-footer">
+       
+    </div>
+</div>
+<div class="modal-backdrop in"></div> 
+<div class="tabbable" id="myTabs" style="margin-bottom: 18px;">
+    <ul class="nav nav-tabs">
+        <li class="">
+            <a href="#fr" id="a-fr" class="tabs" data-toggle="tab">Français</a>
+        </li>
+        <li class="">
+            <a href="#en" id="a-en" class="tabs" data-toggle="tab">English</a>
+        </li>
+        <li class="">
+            <a href="#de" id="a-de" class="tabs" data-toggle="tab">Deutsch</a>
+        </li>
+</ul>
+{% if id is not defined %}
+	<form action="{{ path('new_content') }}" method="post" enctype="multipart/form-data">
+{% else %}
+	<form action="{{ path('edit_content', {'id' : id }) }}" method="post" enctype="multipart/form-data">
+{% endif %}	
+	    
+<div class="tab-content">    
+    <div class="tab-pane" id="fr">
+        <div class="span8">
+            <div class="begin_form">{{ form_row(form_fr.translationFr) }}</div>
+            <div class="rest_form">{{ form_row(form_fr.valuesFr, {'help': 'foobar'}) }}</div>
+        </div>
+        <div class="span4">
+            <div class="well">
+                {{ form_row(form_fr.metasValuesFr) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="tab-pane" id="en">
+        <div class="span8">
+            <div class="begin_form">{{ form_row(form_en.translationEn) }}</div>
+            <div class="rest_form">{{ form_row(form_en.valuesEn) }}</div>
+        </div>
+        <div class="span4">
+            <div class="well">
+                {{ form_row(form_en.metasValuesEn) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="tab-pane" id="de">
+        <div class="span8">
+            <div class="begin_form">{{ form_row(form_de.translationDe) }}</div>
+            <div class="rest_form">{{ form_row(form_de.valuesDe) }}</div>
+        </div>
+        <div class="span4">
+            <div class="well">
+                {{ form_row(form_de.metasValuesDe) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>   
+    
+        <input type="hidden" name="content_taxonomy" value="{{ taxonomy }}" />
+        <div class="buttons">
+            <a href="{{ path('content') }}" class="btn">Fermer</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>    
+        </div>
+    </div>	
+</form>
+{% endblock body %}
+{% block script %}
+<script>
+
+$(document).ready(function() {
+    $('#myModal').hide();
+    $('.modal-backdrop').hide();
+    {% if app.request.get('lang') == '' %}
+        {% set lang = 'fr' %}
+    {% else %}  
+        {% set lang = app.request.get('lang') %}
+    {% endif %} 
+    $("#mytabs li a#a-{{ lang }}").tab('show');
+    $('#loading').hide();
+
+});
+</script>
+{% endblock script %}

@@ -1,0 +1,162 @@
+{% extends "::admin.html.twig" %}
+
+{% block title "Catégories" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Catégories" %}
+{% block action %}
+	<a href="{{ path('new_category') }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> Ajouter</a>
+{% endblock action %}
+
+{% block body %}
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+<form action="{{ path('category_action') }}" id="fields-form" method="post">
+<div class="tabbable" id="myTabs" style="margin-bottom: 18px;">
+    <ul class="nav nav-tabs">
+        <li class="">
+            <a href="#fr" id="a-fr" class="tabs" data-toggle="tab">Français</a>
+        </li>
+        <li class="">
+            <a href="#en" id="a-en" class="tabs" data-toggle="tab">English</a>
+        </li>
+        <li class="">
+            <a href="#de" id="a-de" class="tabs" data-toggle="tab">Deutsch</a>
+        </li>
+</ul>
+<div class="tab-content">    
+    <div class="tab-pane" id="fr">
+		{% include "CAFContentBundle:Category:table.html.twig" with({'lang': 'fr'}) %}
+	</div>
+	<div class="tab-pane" id="en">
+		{% include "CAFContentBundle:Category:table.html.twig" with({'lang': 'en'}) %}
+	</div>
+	<div class="tab-pane" id="de">
+		{% include "CAFContentBundle:Category:table.html.twig" with({'lang': 'de'}) %}
+	</div>
+</div>
+{% include "::toolbar.html.twig" %}
+</form>
+{% endblock body %}
+{% block script %}
+<script type="text/javascript">
+function publish(id, state) {
+	$.ajax({
+		url: '{{ path('publish_category_translation') }}',
+		data: 'id='+id+'&state='+state,
+		success: function(data) {
+			if(state == 1) {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',0)');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/tick.png") }}");
+			} else {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',1)');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/block.png") }}");
+			}
+		}
+	});
+}
+$(document).ready(function() {
+	$("#mytabs li a#a-fr").tab('show');
+
+
+		$('a').hover(function() {
+			$(this).tooltip('show');
+		})
+
+		$("#submitchoix").click(function()
+		{		
+			//$(".listcheckbox").prop("checked", true);
+			var coche=false;
+			$(".listcheckbox_fr").each(function(){
+				var item = $(this);
+				if(item.is(":checked")){
+					coche=true;
+				}
+			});
+
+			$(".listcheckbox_en").each(function(){
+				var item = $(this);
+				if(item.is(":checked")){
+					coche=true;
+				}
+			});
+
+			$(".listcheckbox_de").each(function(){
+				var item = $(this);
+				if(item.is(":checked")){
+					coche=true;
+				}
+			});
+
+			if($('#selectaction').val()==0){
+				alert("Veuillez sélectionner une action");
+				return false;
+			}
+
+			if(!coche){
+				alert("Aucune entrée de menu n'a été sélectionnée");
+				return false;
+			} else {
+				$("#fields-form").submit();
+			}
+		});
+
+		$("#selectallcheckbox_fr").click(function(){
+		    var coche = this.checked;
+	        $(".listcheckbox_fr").each(function(){
+				var item = $(this);
+				if(coche){
+					item.attr('checked', true);
+				}
+				else{
+					item.attr('checked', false);
+				}
+			});
+		});
+
+		$("#selectallcheckbox_en").click(function(){
+		    var coche = this.checked;
+	        $(".listcheckbox_en").each(function(){
+				var item = $(this);
+				if(coche){
+					item.attr('checked', true);
+				}
+				else{
+					item.attr('checked', false);
+				}
+			});
+		});
+
+		$("#selectallcheckbox_de").click(function(){
+		    var coche = this.checked;
+	        $(".listcheckbox_de").each(function(){
+				var item = $(this);
+				if(coche){
+					item.attr('checked', true);
+				}
+				else{
+					item.attr('checked', false);
+				}
+			});
+		});
+	});
+
+function submitPagination() {
+	$('#pagination').append('<input type="hidden" name="selectaction" value="pagination" />');
+	document.getElementById('fields-form').submit();
+}
+
+</script>
+{% endblock script %}

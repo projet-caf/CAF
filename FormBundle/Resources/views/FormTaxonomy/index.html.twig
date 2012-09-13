@@ -1,0 +1,125 @@
+{% extends "::admin.html.twig" %}
+{% block title "Type de formulaire" %}
+
+{% block titlesection "Type de formulaire" %}
+{% block action %}
+	<a href="{{ path("new_form_taxonomy") }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> Ajouter</a>
+{% endblock action %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+<form action="{{ path('form_taxonomy_action') }}" id="fields-form" method="post">
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>Id</th>
+		<th><input id="selectallcheckbox" type="checkbox" name="selectallcheckbox" /></th>
+		<th>Libelle</th>
+		<th>Statut</th>
+		<th>Nombre de champs</th>
+		<th colspan="2">Actions</th>
+		
+	</tr>	
+</thead>
+<tbody>
+{% for taxonomy in taxonomies %}
+<tr>
+	<td>{{ taxonomy.id }}</td>
+	<td><input class="listcheckbox" type="checkbox" value="{{ taxonomy.id }}" name="listid[]" ></td>
+	<td>{{ taxonomy.libelle }}</td>
+	<td>
+		{% if taxonomy.published %}
+			<a href="javascript:" onclick="publish({{ taxonomy.id }},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ taxonomy.id }}" rel="tooltip" title="Publié" /></a>
+		{% else %}
+			<a href="javascript:" onclick="publish({{ taxonomy.id }},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ taxonomy.id }}" rel="tooltip" title="Non publié" /></a>
+		{% endif %}
+	</td>
+	<td>{{ taxonomy.formfields|length }}</td>
+	<td><a href="{{ path('edit_form_taxonomy', { 'id' : taxonomy.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+	<td><a href="#myModal-{{ taxonomy.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+	<div class="modal hide" id="myModal-{{ taxonomy.id }}">
+		<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal">×</button>
+	    	<h3>Type de formulaire</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Voulez-vous supprimer ce type de formulaire ?</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+	    	<a href="{{ path('delete_form_taxonomy', { 'id' : taxonomy.id }) }}" class="btn btn-primary">Oui</a>
+	    </div>
+	</div></td>
+		
+</tr>
+{% endfor %}
+</table>
+</form>
+{% endblock body %}
+
+{% block script %}
+<script type="text/javascript">
+function publish(id, state) {
+	$.ajax({
+		url: '{{ path('publish_taxonomy') }}',
+		data: 'id='+id+'&state='+state,
+		success: function(data) {
+			if(state == 1) {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',0)');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/tick.png") }}");
+			} else {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',1)');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/block.png") }}");
+			}
+		}
+	});
+}
+
+$(document).ready(function() {
+
+	$('a').hover(function() {
+		$(this).tooltip('show');
+	})
+
+	$("#submitchoix").click(function()
+	{		
+		//$(".listcheckbox").prop("checked", true);
+		var coche=false;
+		$(".listcheckbox").each(function(){
+			var item = $(this);
+			if(item.is(":checked")){
+				coche=true;
+			}
+		});
+	});
+
+	$("#selectallcheckbox").click(function(){
+	    var coche = this.checked;
+        $(".listcheckbox").each(function(){
+			var item = $(this);
+			if(coche){
+				item.attr('checked', true);
+			}
+			else{
+				item.attr('checked', false);
+			}
+		});
+	});
+});
+
+function submitPagination() {
+	$('#pagination').append('<input type="hidden" name="selectaction" value="pagination" />');
+	document.getElementById('fields-form').submit();
+}
+</script>
+{% endblock %}

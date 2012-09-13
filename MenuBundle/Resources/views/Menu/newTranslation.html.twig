@@ -1,0 +1,82 @@
+{% extends "::admin.html.twig" %}
+
+{% block title "Traduction de menu" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Traduction de menu" %}
+{% block action %}
+    <a href="{{ path('entries', {'menu': menu_taxonomy }) }}" class="btn"><i class="icon-chevron-left"></i> Retour</a>
+{% endblock action %}
+
+{% block body %}
+{% if target == 'menu' %}
+        <form action="{{ path('edit_translation', {'id' : id, 'menu_taxonomy' : menu_taxonomy, 'lang': lang, 'nb_elem': nb_elem }) }}" method="post" {{ form_enctype(form) }} id="form-entry" class="form-horizontal">
+    {% else %}
+        <form action="{{ path('new_translation', {'menu_taxonomy' : menu_taxonomy, 'id': id, 'lang': lang, 'nb_elem': nb_elem }) }}" method="post" {{ form_enctype(form) }} id="form-entry" class="form-horizontal">
+    {% endif %} 
+
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+
+    <div class="buttons">
+        <a href="{{ path('entries',{'menu': menu_taxonomy }) }}" class="btn">Fermer</a>
+        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+    </div>
+    
+</form>
+</div>
+</div>
+{% endblock body %}
+{% block script %}
+<script type="text/javascript">
+$(function() {
+    $('.url').parent('div').hide();
+    $('.category').parent('div').hide();
+    $('div.link_field input').click(function () {
+        var link = $(this).val();
+        if(link == 0) {
+            $('.url').parent('div').hide();
+            $('.category').parent('div').show();
+        } else {
+            $('.category').parent('div').hide();
+            $('.url').parent('div').show();
+        }    
+    });
+
+    var link = $('div.link_field input:checked').val();
+    if(link == 0) {
+        $('.url').parent('div').hide();
+        $('.category').parent('div').show();
+    } else if(link == 1) {
+        $('.category').parent('div').hide();
+        $('.url').parent('div').show();
+    }
+ });   
+
+    $(document).ready(function(){
+
+        $("#menu_category_category").change(function(){
+            var idcat = $("#menu_menu_category_category").val();
+            if(idcat != ""){
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('getCategoryAjax')}}",
+                    data: "idcat=" + idcat,
+                    cache: false,
+                    success: function(data){                      
+                        var newOptions = data;                    
+                        $("#menu_category_content").html(data);
+                    }
+                });    
+             }
+        });
+    });
+
+   
+
+</script>
+{% endblock script %}
+

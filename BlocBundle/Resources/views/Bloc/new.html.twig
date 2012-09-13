@@ -1,0 +1,63 @@
+{% extends "::admin.html.twig" %}
+{% block title "Gestion des blocs" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Gestion des blocs - "~bloc_type %}
+
+{% block body %}
+{% if id == 0 %}
+	<form action="{{ path('new_bloc') }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('edit_bloc', { 'id': id }) }}" method="post" {{ form_enctype(form) }}>
+{% endif %}		
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+    <a href="{{ path('blocs') }}" class="btn">Fermer</a>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>    
+</form>
+{% endblock body %}
+{% block script %}
+	
+<script type="text/javascript">
+	$(document).ready(function(){
+		if($(".all_published input:checked").val() == 1){
+			$(".selectable").parent('div').hide();			
+		}
+		$(".all_published input").click(function(){
+			if($(this).val() == 1){
+				$(".selectable option:selected").removeAttr("selected");
+				$(".selectable").parent('div').hide();
+			}else{
+				$(".selectable").parent('div').show();
+			}
+		})
+
+		var $container = $('#bloc_banner_slide_images');
+		if($container != null){
+			$container.parent('div').append('<a href="#" id="add_image">Ajouter une image</a>')
+			function add_image() {
+		        index = $container.children().length;
+		        $container.append(
+		            $($container.attr('data-prototype').replace(/__name__label__/g, '').replace(/__name__/g, index))
+		        );
+		    }
+
+		    if($container.children().length == 0) {
+		        add_image();
+		    }
+
+		    $('#add_image').click(function() {
+		        if($container.children().length < 4){
+		        	add_image();
+		        }
+		        if($container.children().length == 4){
+		        	$('a#add_image').remove();
+		        }
+		    });
+		}
+	})
+</script>
+{% endblock script %}

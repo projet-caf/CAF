@@ -1,0 +1,3 @@
+CAFMediaBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: CAFMediaBundle:Default:index }

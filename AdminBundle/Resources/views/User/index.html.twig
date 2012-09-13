@@ -1,0 +1,70 @@
+{% extends "::admin.html.twig" %}
+{% block title "Users" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Users" %}
+{% block action %}
+	<a href="{{ path("new_user") }}" class="btn"><i class="icon-plus-sign"></i> Nouveau</a>
+{% endblock action %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>Id</th>
+		<th>Username</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Roles</th>
+		<th colspan="2">Actions</th>
+	</tr>	
+</thead>
+<tbody>
+{% for user in users %}
+<tr>
+	<td>{{ user.id }}</td>	
+	<td>{{ user.username }}</td>
+	<td>{{ user.firstname }} {{ user.lastname }}</td>
+	<td>{{ user.email }}</td>
+	<td>
+	{% set tab = '' %}
+	{% for group in user.groups %}
+		 {% set tab = [group.name] %}
+	{% endfor %}	
+	{{ tab|join(',') }}
+	</td>
+	<td><a href="{{ path('edit_user', { 'id' : user.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+	<td><a href="#myModal-{{ user.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+	<div class="modal hide" id="myModal-{{ user.id }}">
+		<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal">×</button>
+	    	<h3>Utilsateur</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Voulez-vous supprimer cet utilisateur ?</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+	    	<a href="#" class="btn btn-primary">Oui</a>
+	    </div>
+	</div></td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock body %}

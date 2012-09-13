@@ -1,0 +1,47 @@
+{% extends "::admin.html.twig" %}
+{% block title "Menus" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Menus" %}
+{% block action %}
+	<a href="{{ path("new_menu_taxonomy") }}" class="btn"><i class="icon-plus-sign"></i> Ajouter</a>
+{% endblock action %}
+
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Alias</th>
+			<th colspan="2">Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for menu in menus %}
+		<tr>
+			<td>{{ menu.id }}</td>
+			<td><a href="{{ path('entries', {'menu': menu.id}) }}">{{ menu.name }}</a></td>
+			<td>{{ menu.alias }}</td>
+			<td><a href="{{ path('edit_menu_taxonomy', {'id': menu.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a></td>
+			<td><a href="#"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>	
+{% endblock body %}

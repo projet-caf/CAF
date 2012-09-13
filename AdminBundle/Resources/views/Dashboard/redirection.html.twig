@@ -1,0 +1,25 @@
+<h2>Redirections</h2>
+<table class="table table-striped span11">
+	<thead>
+		<th>#</th>
+		<th>Source</th>
+		<th>Destination</th>
+		<th>Code</th>
+		<th>Nombre</th>
+		<th>Date</th>
+		<th>Id</th>
+	</thead>
+	<tbody>
+	{% for statut in status %}
+		<tr>
+			<td>{{ loop.index }}</td>
+			<td><a href="{{ path('edit_redirect', {'id': statut.id }) }}">{{ statut.source|slice(0,30) }}</a></td>
+			<td>{{ statut.destination }}</td>
+			<td>{{ statut.statuscode }}</td>
+			<td>{{ statut.count }}</td>
+			<td>{{ statut.lastaccessed|date("d/m/Y H:i") }}</td>
+			<td>{{ statut.id }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>

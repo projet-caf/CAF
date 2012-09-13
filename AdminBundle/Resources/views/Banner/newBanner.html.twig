@@ -1,0 +1,62 @@
+{% extends "::admin.html.twig" %}
+{% block title "Bannière" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection %}
+    {% if id is defined %}
+        Editer la Bannière
+    {% else %}
+        Nouvelle Bannière
+    {% endif %} 
+{% endblock titlesection %}
+{% block action %}
+<a href="{{ path('banner') }}" class="btn"><i class="icon-chevron-left"></i> Retour</a>
+{% endblock %}
+{% block body %}
+{% if banner.id is defined %}
+	<form action="{{ path('edit_banner', {'id' : banner.id }) }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('new_banner') }}" method="post" {{ form_enctype(form) }}>
+{% endif %}	
+    <table>
+        <tr>
+            <td>{{ form_label(form.published) }} </td>
+            <td>{{ form_widget(form.published) }} </td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.campaign_name) }} </td>
+            <td>{{ form_widget(form.campaign_name) }} </td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.banner_name) }} </td>
+            <td>{{ form_widget(form.banner_name) }} </td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.file) }} </td>
+            <td> 
+                {% if banner.id is defined %}
+                   <img src="{{ asset(banner.showfile) }} "/>
+                {% endif %} 
+                <br />
+                {{ form_widget(form.file) }} 
+            </td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.link) }} </td>
+            <td>{{ form_widget(form.link) }} </td>
+        </tr>
+
+    </table>
+    {{ form_rest(form) }}
+   
+    
+    {% if banner.id is defined %}
+    	<button type="submit" class="btn">Edit</button>
+    {% else %}
+    	<button type="submit" class="btn">Create</button>
+    {% endif %}		
+</form>
+{% endblock body %}

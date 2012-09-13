@@ -1,0 +1,17 @@
+{% extends "::admin.html.twig" %}
+{% block title "Field Taxonomy" %}
+{% block titlesection "Field Taxonomy" %}
+{% block body %}
+{% if id is not defined %}
+	<form action="{{ path('new_formfield_taxonomy') }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('edit_formfield_taxonomy', {'id' : id }) }}" method="post" {{ form_enctype(form) }}>
+{% endif %}			
+    {{ form_widget(form) }}
+    {% if id is not defined %}
+    	<button type="submit" class="btn">Create</button>
+    {% else %}
+    	<button type="submit" class="btn">Edit</button>
+    {% endif %}	
+</form>
+{% endblock body %}

@@ -1,0 +1,122 @@
+body.login {
+	background-color:#f9f9f9;
+}
+
+.hero-unit.white {
+	background-color:#fff;
+	border:1px solid #efefef;
+	box-shadow: 0 3px 0 rgba(255, 255, 255, 0.2) inset, 0 2px 3px rgba(0, 0, 0, 0.05)
+}
+
+.template {
+	background-color: #eee;
+	text-align: center;
+	margin-bottom: 5px;
+	border-radius:6px;
+	line-height: 26px;
+}
+
+.hauteur {
+	min-height: 150px !important;
+}
+
+.span10.template.top {
+	margin-left:15px !important;
+}
+
+#draggable {
+	cursor: move;
+}
+
+.ui-state-highlight {
+	background-color: #999;
+}
+
+.ui-draggable {
+	background-color: #efefef;
+}
+
+div.publish_field {
+	width:100%;
+	clear:both;
+	float:left;
+}
+
+div.default_image {
+	float: left;
+	width:169px;
+	height:169px;
+	text-align: center;
+}
+
+div.default_image img {
+	max-width: 169px;
+	max-height: 169px;
+}
+
+div.publish_field label,
+div.publish_field input {
+	display: block;
+	float: left;
+	margin-right:5px;
+}
+
+div.link_field label,
+div.link_field input {
+	display: block;
+	float: left;
+	margin-right:5px;
+}
+
+div.buttons {
+	margin-top: 15px;
+}
+
+/* Faded out hr */
+hr.soften {
+  height: 1px;
+  margin: 54px 0;
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+  background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+  background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+  background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0));
+  border: 0;
+}
+
+.sep {
+	margin:18px 0;
+}
+
+th input, th select {
+	margin-bottom: 0px !important;
+}
+
+div.toolbar select {
+	margin-bottom: 0px !important;
+}
+
+small {
+	color:#999;
+	font-size: 100%;
+}
+
+small::before {
+	content: '— ';
+}
+
+span.left-1 {
+	padding-left: 15px;
+}
+
+span.left-2 {
+	padding-left: 30px;
+}
+
+
+span.left-3 {
+	padding-left: 45px;
+}
+
+span.left-4 {
+	padding-left: 60px;
+}

@@ -1,0 +1,136 @@
+{% extends "::admin.html.twig" %}
+{% block title "Type d'email" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Liste des types d'email" %}
+{% block action %}
+	<a href="{{ path("new_typeEmail") }}" class="btn"><i class="icon-plus-sign"></i> Nouveau</a>
+{% endblock action %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+<form action="{{ path('action_typeEmail') }}" id="fields-form" method="post">
+	<table class="table table-striped">
+	<thead>
+		<tr>
+			<th><input id="selectallcheckbox" type="checkbox" name="selectallcheckbox"></th>
+			<th>Id</th>		
+			<th>Type</th>
+			<th>Message par défaut</th>
+			<th colspan="2">Actions</th>
+		</tr>	
+	</thead>
+	<tbody>
+	{% for typeEmail in typeEmails %}
+	<tr>
+		<td>
+			<input class="listcheckbox" type="checkbox" value="{{ typeEmail.id}}" name="listid[]">
+		</td>
+		<td>{{ typeEmail.id }}</td>	
+		<td>{{ typeEmail.type }}</td>
+		<td>{{ typeEmail.message | truncate(100, true, '...') }}</td>
+		<td>
+			{% if typeEmail.published %}
+				<a href="javascript:" onclick="publish({{ typeEmail.id}},0);" rel="tooltip" title="Publié"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ typeEmail.id }}" /></a>
+			{% else %}
+				<a href="javascript:" onclick="publish({{ typeEmail.id}},1);" rel="tooltip" title="Non publié"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ typeEmail.id }}" /></a>
+			{% endif %}
+		</td>
+		<td><a href="{{ path('edit_typeEmail', { 'id' : typeEmail.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a></td>
+		
+		</td>
+	</tr>
+	{% endfor %}
+	</table>
+	<select id="selectaction" name="selectaction">
+		<option selected="selected" value="0">Choisir une action</option>
+		<option value="unpublish">Dépublier la sélection</option>
+		<option value="publish">Publier la sélection</option>
+	</select>
+	<button type="submit" class="btn" id="submitchoix">ok</button>
+</form>
+{% endblock body %}
+{% block script %}
+<script type="text/javascript">
+function publish(id, state) {
+	$.ajax({
+		url: '{{ path('publish_typeEmail') }}',
+		data: 'id='+id+'&state='+state,
+		success: function(data) {
+			if(state == 1) {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',0)');
+				$('#field_'+id).parent('a').attr('data-original-title','Publié');
+				$('#field_'+id).parent('a').attr('title','Publié');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/tick.png") }}");
+			} else {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',1)');
+				$('#field_'+id).parent('a').attr('data-original-title','Non publié');
+				$('#field_'+id).parent('a').attr('title','Non publié');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/block.png") }}");
+			}
+		}
+	});
+}
+
+
+$(function() {
+	$('a').hover(function() {
+		$(this).tooltip('show');
+	})
+
+	jQuery("#submitchoix").click(function()
+	{		
+		//$(".listcheckbox").prop("checked", true);
+		var coche=false;
+		$(".listcheckbox").each(function(){
+				var item = $(this);
+				if(item.is(":checked")){
+					coche=true;
+				}
+			}
+		)
+		if($('#selectaction').val()==0){
+			alert("Veuillez sélectionner une action");
+			return false;
+		}
+		else if(!coche){
+			alert("Aucun élément n'a été sélectionné");
+			return false;
+		}
+		else{
+			jQuery("fields-form").submit();
+		}
+	})
+
+	jQuery("#selectallcheckbox").click(function(){
+	    var coche = this.checked;
+        $(".listcheckbox").each(function(){
+			var item = $(this);
+			if(coche){
+				item.attr('checked', true);
+			}
+			else{
+				item.attr('checked', false);
+			}
+		}
+		)
+	})
+})
+
+	
+</script>
+{% endblock script %}

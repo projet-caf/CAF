@@ -1,0 +1,45 @@
+{% extends "::admin.html.twig" %}
+{% block title "CRM" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Liste des CRM" %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+	<table class="table table-striped">
+	<thead>
+		<tr>
+			<th><input id="selectallcheckbox" type="checkbox" name="selectallcheckbox"></th>
+			<th>Id</th>		
+			<th>Nom du formulaire</th>
+			<th colspan="2">Actions</th>
+		</tr>	
+	</thead>
+	<tbody>
+	{% for formulaire in formulaires %}
+	<tr>
+		<td>
+			<input class="listcheckbox" type="checkbox" value="{{ formulaire.id}}" name="listid[]">
+		</td>
+		<td>{{ formulaire.id }}</td>	
+		<td>{{ formulaire.nomform }}</td>		
+		<td><a href="{{ path('edit_formulaireCRM', { 'id' : formulaire.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a></td>
+	</tr>
+	{% endfor %}
+	</table>
+
+{% endblock body %}

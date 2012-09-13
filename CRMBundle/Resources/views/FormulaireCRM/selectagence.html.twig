@@ -1,0 +1,9 @@
+{% block body %}
+<option value="">-</option>
+
+{% for agence in message %}
+	<option value="{{ agence.id }}">{{ agence.numville }}</option>
+{% endfor %}
+
+
+{% endblock body %}

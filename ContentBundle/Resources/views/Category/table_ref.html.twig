@@ -1,0 +1,59 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th width="2%">Id</th>
+			<th><input id="selectallcheckbox_{{ lang }}" type="checkbox" name="selectallcheckbox" /></th>
+			<th>Catégorie</th>
+			<th>Description</th>
+			<th>Etat</th>
+			<th colspan="2">Traductions</th>
+			<th colspan="2" width="8%">Actions</th>
+			
+		</tr>
+	</thead>
+	<tbody>
+		{% for category in categories %}
+			<tr>
+				<td>{{ category.id }}</td>
+				<td><input class="listcheckbox_{{ lang }}" type="checkbox" value="{{ category.id }}" name="listid[]" ></td>
+				<td>
+					<span class="left-{{ category.level }}">
+					{{ category.title }}<br/><small>{{ category.alias }}</small></span>
+				</td>
+				<td>{{ category.description|raw }}</td>
+				<td>
+					{% if category.published %}
+						<a href="javascript:" onclick="publish({{ category.id }},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ category.id }}" rel="tooltip" title="Publié" /></a>
+					{% else %}
+						<a href="javascript:" onclick="publish({{ category.id }},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ category.id }}" rel="tooltip" title="Non publié" /></a>
+					{% endif %}
+				</td>
+				<td><a href="#">en</a></td>
+				<td><a href="#">de</a></td>
+				<td><a href="{{ path('edit_category', {'id': category.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a></td>
+				<td><a href="#myModal-{{ category.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+					<div class="modal hide" id="myModal-{{ category.id }}">
+						<div class="modal-header">
+					    	<button type="button" class="close" data-dismiss="modal">×</button>
+					    	<h3>Suppression de la catégorie ?</h3>
+					    </div>
+					    <div class="modal-body">
+					    	<p>Voulez-vous supprimer cette catégorie ?</p>
+					    </div>
+					    <div class="modal-footer">
+					    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+					    	<a href="{{ path('delete_category', { 'id' : category.id }) }}" class="btn btn-primary">Oui</a>
+					    </div>
+					</div>
+				</td>
+				<td>
+				{% if publish %}
+					<a href="javascript:" onclick="publish({{ translation_id}},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ translation_id }}" rel="tooltip" title="Publié" /></a>
+				{% else %}
+					<a href="javascript:" onclick="publish({{ translation_id}},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ translation_id }}" rel="tooltip" title="Non publié" /></a>
+				{% endif %}
+			</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

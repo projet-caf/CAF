@@ -1,0 +1,60 @@
+<div class="toolbar">
+	<div class="span3">
+		<div class="sep">
+			<select id="selectaction" name="selectaction">
+				<option selected="selected" value="0">Choisir une action</option>
+				<option value="delete">Supprimer la sélection</option>
+				<option value="unpublish">Dépublier la sélection</option>
+				<option value="publish">Publier la sélection</option>
+			</select>
+			<button type="submit" class="btn" id="submitchoix">Valider</button>
+		</div>
+	</div>
+	<div class="span4">
+		{% if nb_pages > 1 %}
+		<div class="pagination">
+			<ul>
+			{% for page_loop in 1..nb_pages %}
+				{% if page_loop == page %}
+					<li class="active">
+				{% else %}
+					<li>
+				{% endif %}			
+					<a href="{{ path("entries", {'menu': menu, 'page': page_loop }) }}">
+						{{ page_loop }}
+					</a>	
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	</div>
+
+	<div class="span3">	
+		<div class="pull-right sep">
+			Eléments par page : <select name="nb_elem" onchange="document.getElementById('fields-form').submit();">
+			<option value="-1">Eléments par page</option>
+			{% for i in 2..6 %}
+				{% set display = i*5 %}
+				{% if nb_elem == display %}
+					<option value="{{ display }}" selected="selected">{{ display }}</option>
+				{% else %}
+					<option value="{{ display }}">{{ display }}</option>
+				{% endif %}	
+			{% endfor %}
+			{% if nb_elem == 1000 %}	
+				<option value="1000" selected="selected">Tous les éléments</option>
+			{% else %}	
+				<option value="1000">Tous les éléments</option>
+			{% endif %}	
+			</select>
+		</div>			
+
+	</div>
+	<div class="span2">
+		<div class="sep pull-right">
+			<a href="{{ path('new_category') }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> Ajouter</a>
+		</div>
+	</div>
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,70 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th width="2%">Id</th>
+			<th><input id="selectallcheckbox_{{ lang }}" type="checkbox" name="selectallcheckbox" /></th>
+			<th>Catégorie</th>
+			<th>Statut</th>
+			<th>Description</th>
+			<th>SEO Title</th>
+			<th>SEO Description</th>
+			<th colspan="2" width="8%">Actions</th>
+			
+		</tr>
+	</thead>
+	<tbody>
+		{% for category in categories %}
+			{% set publish = 0 %}
+			{% set translation_id = 0 %}
+			<tr>
+				{% for translation in category.translations %}	
+					{% if translation.lang.code == lang %}
+						<td>{{ translation.id }}</td>
+						<td><input class="listcheckbox_{{ lang }}" type="checkbox" value="{{ translation.id }}" name="listid[]" ></td>
+						<td>
+							<span class="left-{{ category.lvl }}">{{ translation.title }}<br/><small>{{ translation.alias }}</small></span>
+						</td>
+						{% set publish = translation.published %}
+						{% set translation_id = translation.id %}
+						<td>
+						{% if publish %}
+							<a href="javascript:" onclick="publish({{ translation_id}},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ translation_id }}" rel="tooltip" title="Publié" /></a>
+						{% else %}
+							<a href="javascript:" onclick="publish({{ translation_id}},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ translation_id }}" rel="tooltip" title="Non publié" /></a>
+						{% endif %}
+						</td>
+						<td>{{ translation.description| truncate(100, true, '...') }}</td>
+						{% set nb_metas = 0 %}
+						{% for metavalue in translation.metasvalue %}
+							{% if metavalue.meta.name == 'Title' or metavalue.meta.name == 'Description' %}
+								{% if metavalue.value is defined %}
+								<td>{{ metavalue.value }}</td>
+								{% else %}
+								<td></td>
+								{% endif %}
+								{% set nb_metas = nb_metas + 1 %}
+							{% endif %}
+						{% endfor%}
+						{% endif %}
+				{% endfor %}
+				<td><a href="{{ path('edit_category', {'id': category.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a></td>
+				<td><a href="#myModal-{{ category.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+					<div class="modal hide" id="myModal-{{ category.id }}">
+						<div class="modal-header">
+					    	<button type="button" class="close" data-dismiss="modal">×</button>
+					    	<h3>Suppression de la catégorie ?</h3>
+					    </div>
+					    <div class="modal-body">
+					    	<p>Voulez-vous supprimer cette catégorie ?</p>
+					    </div>
+					    <div class="modal-footer">
+					    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+					    	<a href="{{ path('delete_category', { 'id' : category.id }) }}" class="btn btn-primary">Oui</a>
+					    </div>
+					</div>
+				</td>
+				
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

@@ -1,0 +1,66 @@
+{% extends "::admin.html.twig" %}
+{% block title "Formulaire" %}
+{% block titlesection "Formulaire" %}
+{% block action %}
+<a href="{{ path('formulaire') }}" class="btn"><i class="icon-chevron-left"></i> Retour</a>
+{% endblock %}
+{% block body %}
+<div class="modal" id="myModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>Chargement...</h3>
+    </div>
+    <div class="modal-body">
+        <img src="{{ asset('bundles/cafadmin/images/ajax-loader.gif') }}" alt=""> 
+    </div>
+    <div class="modal-footer">
+       
+    </div>
+</div>
+
+{% if id is not defined %}
+	<form action="{{ path('new_formulaire') }}" method="post" enctype="multipart/form-data">
+{% else %}
+	<form action="{{ path('edit_formulaire', {'id' : id }) }}" method="post" enctype="multipart/form-data">
+{% endif %}	
+	    
+<div class="tab-formulaire">    
+    <div class="tab-pane" id="fr">
+        <div class="span8">
+            <div class="rest_form">
+                {{ form_label(form.published) }} 
+                {{ form_widget(form.published) }} 
+                {{ form_label(form.title) }} 
+                {{ form_widget(form.title) }} 
+                {{ form_row(form.values, {'help': 'foobar'}) }}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>    
+</div>   
+    
+        <input type="hidden" name="form_taxonomy" value="{{ taxonomy }}" />
+        <div class="buttons">
+            <a href="{{ path('formulaire') }}" class="btn">Fermer</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>    
+        </div>
+    </div>	
+</form>
+{% endblock body %}
+{% block script %}
+<script>
+
+$(document).ready(function() {
+    $('#myModal').hide();
+    $('.modal-backdrop').hide();
+    {% if app.request.get('lang') == '' %}
+        {% set lang = 'fr' %}
+    {% else %}  
+        {% set lang = app.request.get('lang') %}
+    {% endif %} 
+    $("#mytabs li a#a-{{ lang }}").tab('show');
+    $('#loading').hide();
+
+});
+</script>
+{% endblock script %}

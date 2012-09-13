@@ -1,0 +1,40 @@
+{% extends "::admin.html.twig" %}
+{% block title "Configuration" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Configuration" %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+<ul class="thumbnails">
+  <li class="span2">
+    <a href="{{ path('languages') }}" class="thumbnail">
+      <img src="http://placehold.it/160x110" alt="">
+      <div class="caption">
+        <h5>Langue</h5>
+      </div>
+    </a>
+  </li>
+  <li class="span2">
+    <a href="{{ path('countries') }}" class="thumbnail">
+      <img src="http://placehold.it/160x110" alt="">
+      <div class="caption">
+        <h5>Pays</h5>
+      </div>
+    </a>
+  </li>
+</ul>
+{% endblock body %}

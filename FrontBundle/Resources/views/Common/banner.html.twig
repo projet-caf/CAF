@@ -1,0 +1,21 @@
+
+{#	<div class="slides">
+		{% for i in 1..4 %}
+			<div class="slide item-{{i}}">
+				<div class="ban_image"><img src="{{ asset('bundles/caffront/images/image-bandeau.jpg') }}" /></div>
+				<div class="ban_text">
+					<div class="line_orange line">épargne ca evolution</div>
+					<div class="line_black line">donnez de la hauteur à vos intérêts !</div>
+					<div class="knmr line"><span>En savoir plus</span></div>
+				</div>
+			</div>
+		{% endfor %}
+		<div class="ban_btn_navi">
+		</div>
+	</div>
+#}
+<div>
+	{% render "CAFFrontBundle:Module:generateBloc" with {'position': "banner_top", 'unique':1, 'lang':lang, 'cat_id':cat_id, 'item_id':item_id, 'display_menu': display_menu, 'cats': cats} %}
+	{% render "CAFFrontBundle:Module:generateBloc" with {'position': "banner", 'unique':1, 'lang':lang, 'cat_id':cat_id, 'item_id':item_id, 'cats': cats} %}
+</div>
+</div>

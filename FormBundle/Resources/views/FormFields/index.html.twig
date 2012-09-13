@@ -1,0 +1,129 @@
+{% extends "::admin.html.twig" %}
+{% block title "Champ" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Champ" %}
+{% block action %}
+	<a href="{{ path("new_formfield") }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> Ajouter</a>
+{% endblock action %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>#</th>
+		<th>Label</th>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Publié</th>
+		<th>Obligatoire</th>
+		<th>Type de contenus</th>
+		<th colspan="2">Actions</th>
+		<th>Id</th>
+	</tr>	
+</thead>
+<tbody>
+{% for field in fields %}
+<tr>
+	<td>{{ loop.index }}</td>
+	<td>{{ field.libelle }}</td>
+	<td>{{ field.name }}</td>
+	<td>{{ field.IdFormFieldTaxonomy.name }}</td>
+	<td>
+		{% if field.published %}
+			<a href="javascript:" onclick="publish({{ field.id}},0);" rel="tooltip" title="Publié"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ field.id }}" /></a>
+		{% else %}
+			<a href="javascript:" onclick="publish({{ field.id}},1);" rel="tooltip" title="Non publié"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ field.id }}" /></a>
+		{% endif %}
+	</td>
+	<td>
+		{% if field.required %}
+			<a href="javascript:" onclick="mandatory({{ field.id}},0);" rel="tooltip" title="Obligatoire"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="mandatory_field_{{ field.id }}" /></a>
+		{% else %}
+			<a href="javascript:" onclick="mandatory({{ field.id}},1);" rel="tooltip" title="Facultatif"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="mandatory_field_{{ field.id }}" /></a>
+		{% endif %}
+	</td>		
+	<td>{{ field.formtaxonomies|join(',') }}</td>
+	<td><a href="{{ path('edit_formfield', { 'id' : field.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+	<td><a href="#myModal-{{ field.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+	<div class="modal hide" id="myModal-{{ field.id }}">
+		<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal">×</button>
+	    	<h3>Champ</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Voulez-vous supprimer ce champ ?</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+	    	<a href="{{ path('delete_formfield', { 'id' : field.id }) }}" class="btn btn-primary">Oui</a>
+	    </div>
+	</div></td>
+	<td>{{ field.id }}</td>	
+</tr>
+{% endfor %}
+</table>
+
+{% endblock body %}
+{% block script %}
+<script type="text/javascript">
+function publish(id, state) {
+	$.ajax({
+		url: '{{ path('publish_field') }}',
+		data: 'id='+id+'&state='+state,
+		success: function(data) {
+			if(state == 1) {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',0)');
+				$('#field_'+id).parent('a').attr('data-original-title','Publié');
+				$('#field_'+id).parent('a').attr('title','Publié');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/tick.png") }}");
+			} else {
+				$('#field_'+id).parent('a').attr('onclick','publish('+id+',1)');
+				$('#field_'+id).parent('a').attr('data-original-title','Non publié');
+				$('#field_'+id).parent('a').attr('title','Non publié');
+				$('#field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/block.png") }}");
+			}
+		}
+	});
+}
+
+function mandatory(id, state) {
+	$.ajax({
+		url: '{{ path('mandatory_field') }}',
+		data: 'id='+id+'&state='+state,
+		success: function(data) {
+			if(state == 1) {
+				$('#mandatory_field_'+id).parent('a').attr('onclick','mandatory('+id+',0)');
+				$('#mandatory_field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/tick.png") }}");
+			} else {
+				$('#mandatory_field_'+id).parent('a').attr('onclick','mandatory('+id+',1)');
+				$('#mandatory_field_'+id).attr('src', "{{ asset("bundles/cafadmin/images/block.png") }}");
+			}
+		}
+	});
+}
+
+$(function() {
+	$('a').hover(function() {
+		$(this).tooltip('show');
+	})	
+})
+
+	
+</script>
+{% endblock script %}

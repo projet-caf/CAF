@@ -1,0 +1,62 @@
+<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th><input id="selectallcheckbox_{{ lang }}" type="checkbox" name="selectallcheckbox" /></th>
+				<th>Title</th>
+				<th>Type</th>
+				<th>Catégories</th>
+				<th>Date</th>
+				<th>Etat</th>
+				<th>SEO Title</th>
+				<th>SEO Description</th>
+				<th colspan="3">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for content in contents %}
+		{% set publish = 0 %}
+		{% set translation_id = 0 %}
+		<tr>
+			{% for translation in content.translations %}
+				{% if translation.lang.code == lang %}
+					<td>{{ translation.id }}</td>
+					<td><input class="listcheckbox_{{ lang }}" type="checkbox" value="{{ translation.id }}" name="listid[]" ></td>
+					<td>{{ translation.title }}<br /><small>{{ translation.alias }}</small></td>
+					<td>{{ content.idcontenttaxonomy.libelle }}</td>
+					<td>{{ translation.categories|join(',') }}</td>
+					<td>{{ translation.created|date('d/m/Y') }}</td>
+					<td>
+						{% if translation.published %}
+							<a href="javascript:" onclick="publish({{ translation.id }},0);"><img src="{{ asset("bundles/cafadmin/images/tick.png") }}" id="field_{{ translation.id }}" rel="tooltip" title="Publié" /></a>
+						{% else %}
+							<a href="javascript:" onclick="publish({{ translation.id }},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ translation.id }}" rel="tooltip" title="Non publié" /></a>
+						{% endif %}
+					</td>
+					{% set nb_metas = 0 %}
+					{% for metavalue in translation.metasvalue %}
+						{% if metavalue.meta.name == 'Title' or metavalue.meta.name == 'Description' %}
+							<td>{{ metavalue.value }}</td>
+							{% set nb_metas = nb_metas + 1 %}
+						{% endif %}
+					{% endfor%}
+				{% endif %}
+			{% endfor %}
+			<td><a href="{{ path('edit_content', { 'id' : content.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+			<td><a href="#myModal-{{ content.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+			<div class="modal hide" id="myModal-{{ content.id }}">
+				<div class="modal-header">
+			    	<button type="button" class="close" data-dismiss="modal">×</button>
+			    	<h3>{{ content.translations.0.title }}</h3>
+			    </div>
+			    <div class="modal-body">
+			    	<p>Voulez-vous supprimer ce contenu ?</p>
+			    </div>
+			    <div class="modal-footer">
+			    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+			    	<a href="{{ path('delete_content', { 'id' : content.id }) }}" class="btn btn-primary">Oui</a>
+			    </div>
+			</div></td>	
+		</tr>
+		{% endfor %}
+</table>

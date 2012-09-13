@@ -1,0 +1,7 @@
+parameters:
+#    cafcrm.example.class: CAF\CRMBundle\Example
+
+services:
+#    cafcrm.example:
+#        class: %cafcrm.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

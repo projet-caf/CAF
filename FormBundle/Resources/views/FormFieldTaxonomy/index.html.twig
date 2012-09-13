@@ -1,0 +1,62 @@
+{% extends "::admin.html.twig" %}
+{% block title "Type de champ" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Type de champ" %}
+{% block action %}
+	<a href="{{ path("new_formfield_taxonomy") }}" class="btn"><i class="icon-plus-sign"></i> New</a>
+{% endblock action %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>#</th>
+		<th>Nom</th>
+		<th>Balise</th>
+		<th colspan="2">Actions</th>
+		<th>Id</th>
+	</tr>	
+</thead>
+<tbody>
+{% for taxonomy in taxonomies %}
+<tr>
+	<td>{{ loop.index }}</td>
+	<td>{{ taxonomy.name }}</td>
+	<td>{{ taxonomy.balise }}</td>
+	<td><a href="{{ path('edit_formfield_taxonomy', { 'id' : taxonomy.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+	<td><a href="#myModal-{{ taxonomy.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+	<div class="modal hide" id="myModal-{{ taxonomy.id }}">
+		<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal">×</button>
+	    	<h3>Type de champ</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Voulez-vous supprimer ce type de champ ?</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+	    	<a href="{{ path('delete_formfield_taxonomy', { 'id' : taxonomy.id }) }}" class="btn btn-primary">Oui</a>
+	    </div>
+	</div></td>
+	<td>{{ taxonomy.id }}</td>	
+</tr>
+{% endfor %}
+</table>
+
+{% endblock body %}

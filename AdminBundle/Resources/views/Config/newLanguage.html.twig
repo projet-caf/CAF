@@ -1,0 +1,21 @@
+{% extends "::admin.html.twig" %}
+{% block title "Langues" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Langues" %}
+
+{% block body %}
+{% if id is defined %}
+	<form action="{{ path('edit_language', {'id' : id }) }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('new_language') }}" method="post" {{ form_enctype(form) }}>
+{% endif %}		
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+    <a href="{{ path('languages') }}" class="btn">Fermer</a>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+</form>
+{% endblock body %}

@@ -1,0 +1,23 @@
+{% if unique %}
+	{% if html %}
+		{{ html.start|raw }}
+	{% endif %}
+	{% if module is not empty %}
+		{{ module|raw }}
+	{% endif %}
+	{% if html %}
+		{{ html.end|raw }}
+	{% endif %}
+{% else %}
+	{% if html %}
+		{{ html.start|raw }}
+	{% endif %}
+	{% if module is not empty %}
+		{% for modul in module %}
+			{{ modul|raw }}
+		{% endfor %}
+	{% endif %}
+	{% if html %}
+		{{ html.end|raw }}
+	{% endif %}
+{% endif %}

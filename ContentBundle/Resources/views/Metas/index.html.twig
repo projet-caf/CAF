@@ -1,0 +1,64 @@
+{% extends "::admin.html.twig" %}
+{% block title "Metas" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Metas" %}
+{% block action %}
+	<a href="{{ path("new_metas") }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> Ajouter</a>
+{% endblock action %}
+
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Type</th>
+			<th>Balise</th>
+			<th colspan="2">Actions</th>
+			<th>Id</th>
+		</tr>	
+	</thead>
+	<tbody>
+	{% for meta in metas %}
+	<tr>
+		<td>{{ loop.index }}</td>
+		<td>{{ meta.name }}</td>
+		<td>{{ meta.type }}</td>
+		<td>{{ meta.balise }}</td>
+		<td><a href="{{ path('edit_metas', { 'id' : meta.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+		<td><a href="#myModal-{{ meta.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+		<div class="modal hide" id="myModal-{{ meta.id }}">
+			<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal">×</button>
+		    	<h3>Modal header</h3>
+		    </div>
+		    <div class="modal-body">
+		    	<p>Do you want to delete this meta ?</p>
+		    </div>
+		    <div class="modal-footer">
+		    	<a href="#" class="btn" data-dismiss="modal">No</a>
+		    	<a href="#" class="btn btn-primary">Yes</a>
+		    </div>
+		</div></td>
+		<td>{{ meta.id }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock body %}

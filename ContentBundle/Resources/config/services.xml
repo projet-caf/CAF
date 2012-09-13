@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+    <parameters>
+        <parameter key="caf_content.form_type.values.class">CAF\ContentBundle\Form\ValuesType</parameter>
+        <parameter key="caf_content.form_type.metasvalues.class">CAF\ContentBundle\Form\MetasValuesType</parameter>
+    </parameters>
+
+    <services>
+        <service id="caf_content.form_type.values" class="%caf_content.form_type.values.class%">
+            <argument id="caf_content.repository.fields_values" type="service" />
+            <tag name="form.type" alias="values" />
+        </service>
+        <service id="caf_content.repository.fields_values" class="Doctrine\ORM\EntityRepository" factory-service="Doctrine" factory-method="getRepository">
+            <argument>CAFContentBundle:Fields</argument>
+        </service>
+
+        <service id="caf_content.form_type.metasvalues" class="%caf_content.form_type.metasvalues.class%">
+            <argument id="caf_content.repository.metasvalues" type="service" />
+            <tag name="form.type" alias="metasvalues" />
+        </service>
+
+        <service id="caf_content.repository.metasvalues" class="Doctrine\ORM\EntityRepository" factory-service="Doctrine" factory-method="getRepository">
+            <argument>CAFContentBundle:Metas</argument>
+        </service>
+
+        <service id="caf_content.repository.categorytranslation" class="Doctrine\ORM\EntityRepository" factory-service="Doctrine" factory-method="getRepository">
+            <argument>CAFContentBundle:CategoryTranslation</argument>
+        </service>
+
+        <service id="form.type.publish" class="CAF\ContentBundle\Form\Type\PublishType">
+            <argument>%options_publish%</argument>
+            <tag name="form.type" alias="publish" />
+        </service>
+
+        <service id="form.type.template" class="CAF\ContentBundle\Form\Type\TemplateType">
+            <tag name="form.type" alias="template" />
+        </service>  
+
+        <service id="form.type.image" class="CAF\ContentBundle\Form\Type\ImageType">
+            <argument>%options_image%</argument>
+            <tag name="form.type" alias="image" />
+        </service>
+    </services>
+</container>

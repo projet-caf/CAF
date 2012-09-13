@@ -1,0 +1,30 @@
+{% extends "::admin.html.twig" %}
+{% block title "Statut demande" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection %}
+    {% if id is defined %}
+        Editer le statut
+    {% else %}
+        Nouveau Statut de demande
+    {% endif %} 
+{% endblock titlesection %}
+
+{% block body %}
+{% if id is defined %}
+	<form action="{{ path('edit_statutDemande', {'id' : id }) }}" method="post" {{ form_enctype(form) }}>
+{% else %}
+	<form action="{{ path('new_statutDemande') }}" method="post" {{ form_enctype(form) }}>
+{% endif %}		
+    {{ form_widget(form) }}
+    {{ form_rest(form) }}
+    {% if id is defined %}
+    	<button type="submit">Edit</button>
+    {% else %}
+    	<button type="submit">Create</button>
+    {% endif %}		
+</form>
+{% endblock body %}

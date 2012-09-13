@@ -1,0 +1,7 @@
+parameters:
+#    caf_media.example.class: CAF\MediaBundle\Example
+
+services:
+#    caf_media.example:
+#        class: %caf_media.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

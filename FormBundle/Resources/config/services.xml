@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+     <services>
+        <service id="caf_form.form_type.valuesform" class="CAF\FormBundle\Form\ValuesType">
+            <argument id="caf_form.repository.fields_values" type="service" />
+            <tag name="form.type" alias="valuesform" />
+        </service>
+        <service id="caf_form.repository.fields_values" class="Doctrine\ORM\EntityRepository" factory-service="Doctrine" factory-method="getRepository">
+            <argument>CAFFormBundle:FormFields</argument>
+        </service>
+    </services>
+</container>

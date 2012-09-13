@@ -1,0 +1,62 @@
+{% extends "::admin.html.twig" %}
+{% block title "Groupes" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Groupes" %}
+{% block action %}
+	<a href="{{ path("new_group") }}" class="btn"><i class="icon-plus-sign"></i> Nouveau</a>
+{% endblock action %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>#</th>
+		<th>Name</th>
+		<th>Role</th>
+		<th colspan="2">Actions</th>
+		<th>Id</th>
+	</tr>	
+</thead>
+<tbody>
+{% for group in groups %}
+<tr>
+	<td>{{ loop.index }}</td>		
+	<td>{{ group.name }}</td>
+	<td>{{ group.role }}</td>
+	<td><a href="{{ path('edit_group', { 'id' : group.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+	<td><a href="#myModal-{{ group.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+	<div class="modal hide" id="myModal-{{ group.id }}">
+		<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal">×</button>
+	    	<h3>Modal header</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Voulez-vous supprimer ce groupe ?</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+	    	<a href="#" class="btn btn-primary">Oui</a>
+	    </div>
+	</div></td>
+	<td>{{ group.id }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock body %}

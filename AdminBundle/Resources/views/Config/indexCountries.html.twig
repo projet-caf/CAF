@@ -1,0 +1,62 @@
+{% extends "::admin.html.twig" %}
+{% block title "Pays" %}
+
+{% block menu %}
+	
+{% endblock menu %}
+
+{% block titlesection "Pays" %}
+{% block action %}
+	<a href="{{ path("new_country") }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> Ajouter</a>
+{% endblock action %}
+{% block body %}
+
+{% if app.session.hasFlash('error') %}
+    <div class="alert alert-error">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('error') }}
+    </div>
+{% elseif app.session.hasFlash('success') %}
+    <div class="alert alert-success">
+  		<a class="close" data-dismiss="alert" href="#">×</a>
+        {{ app.session.flash('success') }}
+    </div>    
+{% endif %}
+
+<table class="table table-striped">
+<thead>
+	<tr>
+		<th>#</th>
+		<th>Nom</th>
+		<th>Code</th>
+		<th colspan="2">Actions</th>
+		<th>Id</th>
+	</tr>	
+</thead>
+<tbody>
+{% for country in countries %}
+<tr>
+	<td>{{ loop.index }}</td>
+	<td>{{ country.name }}</td>
+	<td>{{ country.code }}</td>
+	<td><a href="{{ path('edit_country', { 'id' : country.id }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+	<td><a href="#myModal-{{ country.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
+	<div class="modal hide" id="myModal-{{ country.id }}">
+		<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal">×</button>
+	    	<h3>Suppression de la langue ?</h3>
+	    </div>
+	    <div class="modal-body">
+	    	<p>Voulez-vous supprimer cette langue ?</p>
+	    </div>
+	    <div class="modal-footer">
+	    	<a href="#" class="btn" data-dismiss="modal">Non</a>
+	    	<a href="{{ path('delete_country', { 'id' : country.id }) }}" class="btn btn-primary">Oui</a>
+	    </div>
+	</div></td>
+	<td>{{ country.id }}</td>	
+</tr>
+{% endfor %}
+</table>
+
+{% endblock body %}
