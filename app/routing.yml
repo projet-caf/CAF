@@ -1,0 +1,48 @@
+CAFFormBundle:
+    resource: "@CAFFormBundle/Resources/config/routing.yml"
+    prefix:   /
+
+CAFFrontBundle:
+    resource: "@CAFFrontBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+CAFBlocBundle:
+    resource: "@CAFBlocBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+CAFFormBundle:
+    resource: "@CAFFormBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+CAFMenuBundle:
+    resource: "@CAFMenuBundle/Controller/"
+    type:     annotation
+    prefix:   /admin/menus
+
+CAFAdminBundle:
+    resource: "@CAFAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+CAFCRMBundle:
+    resource: "@CAFCRMBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+CAFContentBundle:
+    resource: "@CAFContentBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+CAFMediaBundle:
+    resource: "@CAFMediaBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+# Internal routing configuration to handle ESI
+_internal:
+    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+    prefix:   /_internal

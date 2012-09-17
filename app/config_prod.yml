@@ -1,0 +1,36 @@
+parameters:
+    options_publish:
+        0: Non publié
+        1: Publié
+    options_image:
+        alt: ~
+        title: ~
+        image: ~
+    options_link:
+        0: Interne
+        1: Externe
+    locale_lang:
+        fr: fr_fr
+        en: en_us
+        de: de_de   
+    directory_separator:  '/' 
+
+imports:
+    - { resource: config.yml }
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: debug
