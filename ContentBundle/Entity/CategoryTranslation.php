@@ -407,4 +407,5 @@ class CategoryTranslation
     {
         return $this->url;
     }
+
 }

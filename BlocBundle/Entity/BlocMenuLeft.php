@@ -41,11 +41,11 @@ class BlocMenuLeft
             $html='<ul class="left_block">';
             foreach ($menus as $key_ent => $menu) {
                 $class = ''; 
-                if (isset($menu['category']['id']) && in_array($menu['category']['id'],$cats)) {
+                if (isset($menu['category']) && in_array($menu['category'],$cats) && $menu['category'] != 0) {
                     $class = ' selected';
-                } else if (isset($menu['category']) && $menu['category']['id'] == $cat_id && $cat_id != null) {
+                } else if (isset($menu['category']) && $menu['category'] == $cat_id && $cat_id != 0 && $menu['category'] != 0) {
                     $class = ' selected';
-                } else if (isset($menu['content']) && $menu['content']['id'] == $item_id && $item_id != null) {
+                } else if (isset($menu['content']) && $menu['content'] == $item_id && $item_id != null && $menu['content'] != 0) {
                     $class = ' selected';
                 } else {
                     $class = '';
@@ -55,7 +55,15 @@ class BlocMenuLeft
                 if(isset($menu['urls_content'])){
                     $url = $menu['urls_content'];
                 }
-                $html.='<li class="menu_lat'.$class.' lvl_'.$menu['level'].'"><a href="'.$base_url.$url.'">'.$menu['title'].'</a></li>';
+
+                $link = '';
+                $start_url = substr($url,0,7);
+                if($start_url == 'http://') {
+                    $link = $url;
+                } else {
+                    $link = $base_url.$url;
+                }   
+                $html.='<li class="menu_lat'.$class.' lvl_'.$menu['level'].'"><a href="'.$link.'">'.$menu['title'].'</a></li>';
             }
             $html.='</ul>'; 
             if($key == $size){

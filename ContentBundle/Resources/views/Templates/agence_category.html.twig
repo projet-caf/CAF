@@ -14,28 +14,57 @@
 		<h1>{{ category.title|upper }}</h1>
 		{% set media = '' %}
 		{% set short_desc = '' %}
-		{% set date_news = '' %}
+		{% set rue = '' %}
+		{% set cp = '' %}
+		{% set ville = '' %}
+		{% set tel = '' %}
+		{% set fax = '' %}
+		{% set adresse = '' %}
 		{% for article in category.contents %}
 			{% if article.lang.code == lang %}
 				{% for value in article.fieldsValue %}
 					{% if value.field.idFieldTaxonomy.name == 'Image' %}
 						{% set media = value.value %}
 					{% endif %}
-					{% if value.field.name == 'description' %}
+					{% if value.field.name == 'rue' %}
+						{% set rue = value.value %}
+					{% endif %}
+					{% if value.field.name == 'description_courte' %}
 						{% set short_desc = value.value %}
 					{% endif %}
-					{% if value.field.name == 'date_news' %}
-						{% set date_news = value.value %}
+					{% if value.field.name == 'rue' %}
+						{% set rue = value.value %}
+					{% endif %}
+					{% if value.field.name == 'code_postal' %}
+						{% set cp = value.value %}
+					{% endif %}
+					{% if value.field.name == 'ville' %}
+						{% set ville = value.value %}
+					{% endif %}
+					{% if value.field.name == 'telephone' %}
+						{% set tel = value.value %}
+					{% endif %}
+					{% if value.field.name == 'fax' %}
+						{% set fax = value.value %}
+					{% endif %}
+					{% if value.field.name == 'adresse' %}
+						{% set adresse = value.value %}
 					{% endif %}
 				{% endfor %}
 				<div class="left-actu-cat">
 					<a href="{{ path('front', {'lang': lang, 'country': country, 'url': article.contentUrls.0.url }) }}">
-						<img src="{{ asset(media.image) }}" alt="{{ media.alt }}" title="{{ media.title }}" class="img-left" />
+						{% if media.image != '' %}
+							<img src="{{ asset(media.image) }}" alt="{{ media.alt }}" title="{{ media.title }}" class="img-left" />
+						{% else %}
+							<img src="{{ asset('bundles/cafadmin/images/image-par-defaut.jpg') }}"	alt="{{ article.title }}" title="{{ article.title }}" />
+						{% endif %}	
 					</a>
 				</div>
 				<div class="right-cat">
 					<h2>{{ article.title }}</h2>
-					{{ date_news }}
+					{{ rue }} - {{ cp ~ " " ~ ville }}<br />{{ adresse }} <br />
+					Tél : {{ tel }}<br />
+					Fax : {{ fax }}<br />
 					{{ short_desc|raw }}
 				</div>
 			{% endif %}

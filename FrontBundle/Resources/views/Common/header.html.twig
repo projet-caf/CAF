@@ -7,9 +7,15 @@
 				<div class="search">
 					<div class="lang_navi padding5">
 		                <ul>
-	    					<li><a href="#" title="" class="first">FR</a></li>
-	    					<li><a href="#" title="">EN</a></li>
-	    					<li><a href="#" title="">DE</a></li>
+		                	{% if item_id != '' %}
+		    					<li><a href="{{ path('translateItem', {'lang':lang, 'item_id':item_id, 'country': country, 'lang_dest': 'fr'}) }}" title="" class="first">FR</a></li>
+		    					<li><a href="{{ path('translateItem', {'lang':lang, 'item_id':item_id, 'country': country, 'lang_dest': 'en'}) }}" title="">EN</a></li>
+		    					<li><a href="{{ path('translateItem', {'lang':lang, 'item_id':item_id, 'country': country, 'lang_dest': 'de'}) }}" title="">DE</a></li>
+		    				{% else %}
+		    					<li><a href="{{ path('translateCat', {'lang':lang, 'cat_id':cat_id, 'country': country, 'lang_dest': 'fr'}) }}" title="" class="first">FR</a></li>
+		    					<li><a href="{{ path('translateCat', {'lang':lang, 'cat_id':cat_id, 'country': country, 'lang_dest': 'en'}) }}" title="">EN</a></li>
+		    					<li><a href="{{ path('translateCat', {'lang':lang, 'cat_id':cat_id, 'country': country, 'lang_dest': 'de'}) }}" title="">DE</a></li>
+		    				{% endif %}
 	    				</ul>
 		        	</div>
 		        	<input type="submit" id="search_button" class="research_button" value=" "/>
@@ -48,7 +54,14 @@ $(function(){
 	$(".top_navi li.parent").hoverIntent(config);
 	$("li.lvl_1").mouseover(function(){
 		$("li.lvl_1").children('ul').hide();
-		$(this).children('ul').show();
+		$(this).parent('ul.lvl_1').parent('div.submenu').children('ul.menu_picto').css('margin-left','0');
+		var height_parent = $(this).parent('ul').height();
+		$(this).children('ul').height(height_parent);
+
+		if($(this).children('ul').children('li').length > 0) {
+			$(this).children('ul').show();
+			$(this).parent('ul.lvl_1').parent('div.submenu').children('ul.menu_picto').css('margin-left','210px');
+		}
 	});
 	/*$("li.lvl_1").mouseout(function(){
 		//$(this).children('ul').hide();
@@ -56,7 +69,15 @@ $(function(){
 })
 
 function makeTall() {
-    jQuery(this).children("div").slideDown("fast", function(){});
+	var height_parent = $(this).children('div').height();
+	var padding_top = $(this).children('div').children('ul.menu_picto').css('padding-top');
+	if (typeof(padding_top) != 'undefined') {
+		padding_top = padding_top.substr(0,2);
+		var height_result = height_parent - padding_top;
+    	$(this).children('div').children('ul.menu_picto').height(height_result);
+	}
+		
+    $(this).children("div").slideDown("fast", function(){});
 }
 
 function makeShort() {

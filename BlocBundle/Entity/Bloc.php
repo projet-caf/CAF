@@ -81,14 +81,40 @@ class Bloc
     private $all_published;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\Category")
+     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\CategoryTranslation")
+     * @ORM\JoinTable(name="bloc_category_fr")
      */
-    private $categories;
+    private $categories_fr;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\Content")
+     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\ContentTranslation")
+     * @ORM\JoinTable(name="bloc_content_fr")
      */
-    private $contents;
+    private $contents_fr;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\CategoryTranslation")
+     * @ORM\JoinTable(name="bloc_category_en")
+     */
+    private $categories_en;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\ContentTranslation")
+     * @ORM\JoinTable(name="bloc_content_en")
+     */
+    private $contents_en;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\CategoryTranslation")
+     * @ORM\JoinTable(name="bloc_category_de")
+     */
+    private $categories_de;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\CAF\ContentBundle\Entity\ContentTranslation")
+     * @ORM\JoinTable(name="bloc_content_de")
+     */
+    private $contents_de;
 
     /**
      * @var string $html
@@ -382,5 +408,203 @@ class Bloc
     public function getDisplayTitle()
     {
         return $this->display_title;
+    }
+
+    /**
+     * Add categories_fr
+     *
+     * @param CAF\ContentBundle\Entity\CategoryTranslation $categoriesFr
+     * @return Bloc
+     */
+    public function addCategoriesFr(\CAF\ContentBundle\Entity\CategoryTranslation $categoriesFr)
+    {
+        $this->categories_fr[] = $categoriesFr;
+    
+        return $this;
+    }
+
+    /**
+     * Remove categories_fr
+     *
+     * @param CAF\ContentBundle\Entity\CategoryTranslation $categoriesFr
+     */
+    public function removeCategoriesFr(\CAF\ContentBundle\Entity\CategoryTranslation $categoriesFr)
+    {
+        $this->categories_fr->removeElement($categoriesFr);
+    }
+
+    /**
+     * Get categories_fr
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getCategoriesFr()
+    {
+        return $this->categories_fr;
+    }
+
+    /**
+     * Add contents_fr
+     *
+     * @param CAF\ContentBundle\Entity\ContentTranslation $contentsFr
+     * @return Bloc
+     */
+    public function addContentsFr(\CAF\ContentBundle\Entity\ContentTranslation $contentsFr)
+    {
+        $this->contents_fr[] = $contentsFr;
+    
+        return $this;
+    }
+
+    /**
+     * Remove contents_fr
+     *
+     * @param CAF\ContentBundle\Entity\ContentTranslation $contentsFr
+     */
+    public function removeContentsFr(\CAF\ContentBundle\Entity\ContentTranslation $contentsFr)
+    {
+        $this->contents_fr->removeElement($contentsFr);
+    }
+
+    /**
+     * Get contents_fr
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getContentsFr()
+    {
+        return $this->contents_fr;
+    }
+
+    /**
+     * Add categories_en
+     *
+     * @param CAF\ContentBundle\Entity\CategoryTranslation $categoriesEn
+     * @return Bloc
+     */
+    public function addCategoriesEn(\CAF\ContentBundle\Entity\CategoryTranslation $categoriesEn)
+    {
+        $this->categories_en[] = $categoriesEn;
+    
+        return $this;
+    }
+
+    /**
+     * Remove categories_en
+     *
+     * @param CAF\ContentBundle\Entity\CategoryTranslation $categoriesEn
+     */
+    public function removeCategoriesEn(\CAF\ContentBundle\Entity\CategoryTranslation $categoriesEn)
+    {
+        $this->categories_en->removeElement($categoriesEn);
+    }
+
+    /**
+     * Get categories_en
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getCategoriesEn()
+    {
+        return $this->categories_en;
+    }
+
+    /**
+     * Add contents_en
+     *
+     * @param CAF\ContentBundle\Entity\ContentTranslation $contentsEn
+     * @return Bloc
+     */
+    public function addContentsEn(\CAF\ContentBundle\Entity\ContentTranslation $contentsEn)
+    {
+        $this->contents_en[] = $contentsEn;
+    
+        return $this;
+    }
+
+    /**
+     * Remove contents_en
+     *
+     * @param CAF\ContentBundle\Entity\ContentTranslation $contentsEn
+     */
+    public function removeContentsEn(\CAF\ContentBundle\Entity\ContentTranslation $contentsEn)
+    {
+        $this->contents_en->removeElement($contentsEn);
+    }
+
+    /**
+     * Get contents_en
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getContentsEn()
+    {
+        return $this->contents_en;
+    }
+
+    /**
+     * Add categories_de
+     *
+     * @param CAF\ContentBundle\Entity\CategoryTranslation $categoriesDe
+     * @return Bloc
+     */
+    public function addCategoriesDe(\CAF\ContentBundle\Entity\CategoryTranslation $categoriesDe)
+    {
+        $this->categories_de[] = $categoriesDe;
+    
+        return $this;
+    }
+
+    /**
+     * Remove categories_de
+     *
+     * @param CAF\ContentBundle\Entity\CategoryTranslation $categoriesDe
+     */
+    public function removeCategoriesDe(\CAF\ContentBundle\Entity\CategoryTranslation $categoriesDe)
+    {
+        $this->categories_de->removeElement($categoriesDe);
+    }
+
+    /**
+     * Get categories_de
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getCategoriesDe()
+    {
+        return $this->categories_de;
+    }
+
+    /**
+     * Add contents_de
+     *
+     * @param CAF\ContentBundle\Entity\ContentTranslation $contentsDe
+     * @return Bloc
+     */
+    public function addContentsDe(\CAF\ContentBundle\Entity\ContentTranslation $contentsDe)
+    {
+        $this->contents_de[] = $contentsDe;
+    
+        return $this;
+    }
+
+    /**
+     * Remove contents_de
+     *
+     * @param CAF\ContentBundle\Entity\ContentTranslation $contentsDe
+     */
+    public function removeContentsDe(\CAF\ContentBundle\Entity\ContentTranslation $contentsDe)
+    {
+        $this->contents_de->removeElement($contentsDe);
+    }
+
+    /**
+     * Get contents_de
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getContentsDe()
+    {
+        return $this->contents_de;
     }
 }

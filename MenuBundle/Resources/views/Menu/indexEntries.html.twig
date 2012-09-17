@@ -80,17 +80,17 @@
 								{% endif %}
 							</td>
 							<td>
-                                                                {% if dataTranslationExists[entry.id]["en_us"] is not defined %}
-                                                                    <a href="{{ path('new_translation', {'id': entry.id,'menu_taxonomy': menu, 'lang': 'en_us', 'nb_elem': nb_elem}) }}" title="Ajouter une traduction">en</a>
-                                                                {% endif %}
-                                                        </td>
+	                            {% if dataTranslationExists[entry.id]["en_us"] is not defined %}
+	                                <a href="{{ path('new_translation', {'id': entry.id,'menu_taxonomy': menu, 'lang': 'en_us', 'nb_elem': nb_elem}) }}" title="Ajouter une traduction">en</a>
+	                            {% endif %}
+                            </td>
 							<td>								
-                                                                {% if dataTranslationExists[entry.id]["de_de"] is not defined %}
-                                                                  <a href="{{ path('new_translation', {'id': entry.id,'menu_taxonomy': menu, 'lang': 'de_de', 'nb_elem': nb_elem}) }}"  title="Ajouter une traduction">de</a>
-                                                                {% endif %}                                                     
-                                                        </td>
+	                            {% if dataTranslationExists[entry.id]["de_de"] is not defined %}
+	                            	<a href="{{ path('new_translation', {'id': entry.id,'menu_taxonomy': menu, 'lang': 'de_de', 'nb_elem': nb_elem}) }}"  title="Ajouter une traduction">de</a>
+	                            {% endif %}                                              
+                            </td>
 							<td>
-								<a href="{{ path('edit_entry', {'id': entry.id, 'menu_taxonomy': menu }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+								<a href="{{ path('edit_entry', {'id': entry.id, 'menu_taxonomy': menu, 'nb_elem': nb_elem }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
 							</td>
 							<td>
 								<a href="#myModal-{{ entry.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
@@ -131,7 +131,7 @@
 							<td>{{ entry.id }}</td>
 							<td><input class="listcheckbox_en" type="checkbox" value="{{ entry.id }}" name="listid[]" ></td>
 							<td>
-								<span class="left-{{ entry.level }}"><a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'en_us', 'nb_elem': nb_elem }) }}">{{ entry.title }}</a></span>
+								<span class="left-{{ entry.level }}"><a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'en_us' }) }}">{{ entry.title }}</a></span>
 							</td>
 							<td>
 								{% if entry.published %}
@@ -141,7 +141,7 @@
 								{% endif %}
 							</td>
 							<td>
-								<a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'en_us', 'nb_elem': nb_elem }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+								<a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'en_us' }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
 							</td>
 							<td>
 								<a href="#myModal-{{ entry.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>
@@ -183,7 +183,7 @@
 							<td>{{ entry.id }}</td>
 							<td><input class="listcheckbox_de" type="checkbox" value="{{ entry.id }}" name="listid[]" ></td>
 							<td>
-								<span class="left-{{ entry.level }}"><a href="{{ path('edit_entry', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'de_de', 'nb_elem': nb_elem }) }}">{{ entry.title }}</a></span>
+								<span class="left-{{ entry.level }}"><a href="{{ path('edit_entry', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'de_de' }) }}">{{ entry.title }}</a></span>
 							</td>
 							<td>
 								{% if entry.published %}
@@ -193,7 +193,7 @@
 								{% endif %}
 							</td>
 							<td>
-								<a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'de_de', 'nb_elem': nb_elem }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
+								<a href="{{ path('edit_translation', {'id': entry.id, 'menu_taxonomy': menu, 'lang': 'de_de' }) }}"><img src="{{ asset("bundles/cafadmin/images/pencil.png") }}" /></a>
 							</td>
 							<td>
 								<a href="#myModal-{{ entry.id }}" data-toggle="modal"><img src="{{ asset("bundles/cafadmin/images/delete.png") }}" /></a>

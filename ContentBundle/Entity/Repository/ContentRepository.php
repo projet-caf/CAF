@@ -15,16 +15,17 @@ class ContentRepository extends EntityRepository
 
 	public function lastArticles($limit)
 	{
+        $limit = $limit*3;
 		return $this->getEntityManager()
-					->createQueryBuilder('c,t')
-					->Select('c,t')
-					->from('CAFContentBundle:Content','c')
-					->leftjoin('c.translations', 't')
-					->orderby('t.created', 'DESC')
-					->setFirstResult(0)
-					->setMaxResults($limit)
-					->getQuery()
-					->getResult();
+                ->createQueryBuilder('c,t')
+                ->Select('c,t')
+                ->from('CAFContentBundle:Content','c')
+                ->leftjoin('c.translations', 't')
+                ->orderby('t.updated', 'DESC')
+                ->setFirstResult(0)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
 	}
 
 	public function findAllOrder($page,$nb_elem = 20,$taxonomy = -1)
@@ -42,7 +43,7 @@ class ContentRepository extends EntityRepository
 				->Select('c,t')
 				->from('CAFContentBundle:Content','c')
 				->leftjoin('c.translations', 't')
-				->orderby('t.created', 'DESC')
+				->orderby('t.updated', 'DESC')
 				->setFirstResult($offset)
 				->setMaxResults($max)
 				->getQuery()
@@ -55,7 +56,7 @@ class ContentRepository extends EntityRepository
 				->leftjoin('c.translations', 't')
 				->leftjoin('c.id_content_taxonomy', 'ct')
 				->where('ct.id=:taxonomy')
-				->orderby('t.created', 'DESC')
+				->orderby('t.updated', 'DESC')
 				->setParameter('taxonomy',$taxonomy)
 				->setFirstResult($offset)
 				->setMaxResults($max)

@@ -38,4 +38,36 @@ class CategoryTranslationRepository extends EntityRepository
                         ->getQuery()
                         ->getResult();
     }
+
+    public function getCanonical($id) {
+        return $this->getEntityManager()
+                    ->createQueryBuilder('mv')
+                    ->Select('mv.value')
+                    ->from('CAFContentBundle:MetasValueCategory','mv')
+                    ->leftjoin('mv.category_translation','c')
+                    ->leftjoin('mv.meta','m')
+                    ->where('c.id=:id')
+                    ->setParameter('id',$id)
+                    ->andWhere('m.name=:canonical')
+                    ->setParameter('canonical','Canonical')
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function getAbsoluteUrl($id) {
+        return $this->getEntityManager()
+                    ->createQueryBuilder('mv')
+                    ->Select('mv.value')
+                    ->from('CAFContentBundle:MetasValueCategory','mv')
+                    ->leftjoin('mv.category_translation','c')
+                    ->leftjoin('mv.meta','m')
+                    ->where('c.id=:id')
+                    ->setParameter('id',$id)
+                    ->andWhere('m.name=:url')
+                    ->setParameter('url','Url')
+                    ->getQuery()
+                    ->getResult();
+    }
+
+
 }

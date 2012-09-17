@@ -27,6 +27,7 @@ class CommonController extends Controller
         return array('menus' => $menus, 'display_menu' => $display_menu, 'lang' => $lang, 'cat_id' => $cat_id, 'item_id' => $item_id, 'path' => $path, 'country' => $country, 'cats' => $cats);
     }
 
+
     /**
      * @Route("/banner")
      * @Template()

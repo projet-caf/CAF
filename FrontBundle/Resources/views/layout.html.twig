@@ -27,14 +27,16 @@
 			{% render "CAFFrontBundle:Common:left" with {'lang': lang, 'cat_id':cat_id, 'item_id':item_id, 'path':path, 'cats': cats} %}
 			
 			{% include "CAFContentBundle:Templates:" ~ template ~ ".html.twig" %}
+
 			{% render "CAFFrontBundle:Common:right" with {'lang': lang, 'cat_id':cat_id, 'item_id':item_id, 'cats': cats} %}
-			
+			<div class="clear"></div>
 		</div>
 		<div class="clear"></div>
 
 		<div class="bottom">
 			{% render "CAFFrontBundle:Common:footer" with {'lang': lang, 'cat_id':cat_id, 'item_id':item_id, 'cats': cats} %}
 	    </div>
+	    <div class="clear"></div>
 	</div>
 </body>
 

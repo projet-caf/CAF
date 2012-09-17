@@ -208,7 +208,7 @@ class CategoryController extends Controller
 	public function deleteAction($id)
 	{
 		$category = $this->getDoctrine()
-					  ->getRepository('CAFContentBundle:category')
+					  ->getRepository('CAFContentBundle:Category')
 					  ->find($id);
 		$em = $this->getDoctrine()->getEntityManager();			  
 	    $em->remove($category);

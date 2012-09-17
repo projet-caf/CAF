@@ -11,6 +11,7 @@ class MenuTranslationType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 
+		$lang_id = $options['lang_id'];
 		$menu_taxonomy = $options['menu_taxonomy'];
 		$builder->add('title','text', array('label' => 'Titre'))
 				->add('slug', 'text', array('required' => false, 'label' => 'Alias'))
@@ -26,14 +27,20 @@ class MenuTranslationType extends AbstractType
 				->add('link_taxonomy', 'link', array('attr' => array('class' => 'link'), 'label' => 'Type de lien'))
 				->add('category','entity', array(
 					'attr' => array('class' => 'category'),
-					'class' => 'CAFContentBundle:Category',
+					'class' => 'CAFContentBundle:CategoryTranslation',
+					'query_builder' => function(EntityRepository $er) use ($lang_id) {
+						return $er->getCategoryLang($lang_id);
+					},
 					'empty_value' => 'Choisissez une catégorie',
 					'required' => false,
 					))
 				->add('content','entity', array(
 					'attr' => array('class' => 'category'),
-					'class' => 'CAFContentBundle:Content',
+					'class' => 'CAFContentBundle:ContentTranslation',
 					'empty_value' => 'Choisissez un contenu',
+					'query_builder' => function(EntityRepository $er) use ($lang_id) {
+						return $er->getContentLang($lang_id);
+					},
 					'required' => false,
 					))
 				->add('urls', 'text', array('attr' => array('class' => 'url'),'required' => false))
@@ -60,7 +67,7 @@ class MenuTranslationType extends AbstractType
 
 	public function getDefaultOptions(array $options)
     {
-        return array('data_class' => 'CAF\MenuBundle\Entity\MenuTranslation');
+        return array('data_class' => 'CAF\MenuBundle\Entity\Menu', 'menu_taxonomy' => 1, 'lang_id' => 2);
     }
 
 	public function getName() {

@@ -58,17 +58,17 @@ $(function() {
 
     $(document).ready(function(){
 
-        $("#menu_category").change(function(){
-            var idcat = $("#menu_category").val();
+        $("#menu_category_category").change(function(){
+            var idcat = $("#menu_menu_category_category").val();
             if(idcat != ""){
                 $.ajax({
                     type: "POST",
-                    url: "{{ path('getCategoryAjax', {'lang' : lang}) }}",
+                    url: "{{ path('getCategoryAjax')}}",
                     data: "idcat=" + idcat,
                     cache: false,
                     success: function(data){                      
                         var newOptions = data;                    
-                        $("#menu_content").html(data);
+                        $("#menu_category_content").html(data);
                     }
                 });    
              }

@@ -27,4 +27,43 @@ class ContentTranslationRepository extends EntityRepository
 						->getQuery()
 						->getResult();
 	}
+
+	public function getContentLang($lang) {
+		return $this->getEntityManager()
+					->createQueryBuilder('ct')
+                    ->Select('ct')
+                    ->from('CAFContentBundle:ContentTranslation','ct')
+                    ->where('ct.lang=:lang')
+                    ->setParameter('lang', $lang)
+                    ->andwhere('ct.published=:published')
+                    ->setParameter('published',1)
+        ;            
+	}
+
+	public function getCanonical($id) {
+        return $this->getEntityManager()
+                    ->createQueryBuilder('mv')
+                    ->Select('mv.value')
+                    ->from('CAFContentBundle:MetasValue','mv')
+                    ->leftjoin('mv.content_translation','c')
+                    ->leftjoin('mv.meta','m')
+                    ->where('c.id=:id')
+                    ->setParameter('id',$id)
+                    ->andwhere('m.name=:name')
+                    ->setParameter('name','Url')
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function getAbsoluteUrl($id) {
+    	return $this->getEntityManager()
+    				->createQueryBuilder('u')
+    				->select('u.url')
+    				->from('CAFContentBundle:UrlsContent','u')
+    				->leftjoin('u.content_translation','ct')
+    				->where('ct.id=:id')
+    				->setParameter('id',$id)
+    				->getQuery()
+    				->getResult();
+    }
 }

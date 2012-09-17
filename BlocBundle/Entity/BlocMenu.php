@@ -69,8 +69,14 @@ class BlocMenu
                             if ($url == '') {
                                 $url = $entry['urls'];
                             }
-                            
-                            $html .= '<li class="'.$class.'"><a href="'.$url.'" title=""><span class="menu_name">'.$title.'</span></a>';
+                            $link = '';
+                            $start_url = substr($url,0,7);
+                            if($start_url == 'http://') {
+                                $link = $url;
+                            } else {
+                                $link = $base_url.$url;
+                            }   
+                            $html .= '<li class="'.$class.'"><a href="'.$link.'" title=""><span class="menu_name">'.$title.'</span></a>';
                         }
                     }
                     $html.='</ul>';             
@@ -89,7 +95,7 @@ class BlocMenu
                             }else{
                                 $title = $entry['title'];
                             }
-                            $class = $key_ent == 1 ? 'first':'';
+                            $class = $key_ent == 0 ? 'first':'';
                             $url = '';
                             if(isset($entry['url_content'])){
                                 $url = $entry['url_content'];
@@ -97,7 +103,14 @@ class BlocMenu
                             if ($url == '') {
                                 $url = $entry['urls'];
                             }
-                            $html .= '<li class="'.$class.'"><a href="'.$url.'" title=""><span class="menu_name">'.$title.'</span></a>';
+                            $link = '';
+                            $start_url = substr($url,0,7);
+                            if($start_url == 'http://') {
+                                $link = $url;
+                            } else {
+                                $link = $base_url.$url;
+                            }   
+                            $html .= '<li><a href="'.$link.'" class="'.$class.'"><span class="menu_name">'.$title.'</span></a>';
                         }
                     }
                     $html.='</ul>';             
@@ -106,64 +119,80 @@ class BlocMenu
                 break;
             case 'header':
                 $level = 0;
+                $menu_pictos = array();
                 if(!empty($menus)) {
                     $html ='<div class="top_navi padding10">';
-                    $html .= '<ul><li><a href="'.$base_url.'" title="" class="first"><img src="'.$path_web.'/bundles/caffront/images/home.png" ></a>';
-                    foreach ($menus as $key_ent => $entry) {                     
-                        if($entry['level'] == $level){
-                            $html.='</li>';
+                    $html .= '<ul><li><a href="'.substr($base_url,0,strlen($base_url)-1).'" title="" class="first"><img src="'.$path_web.'/bundles/caffront/images/home.png" ></a>';
+                    foreach ($menus as $key_ent => $entry) {
+                        if($entry['menu_picto']) {
+                            $menu_pictos[] = $entry;
+                        } else {                    
+                            if($entry['level'] == $level){
+                                $html.='</li>';
 
-                            if($entry['level'] == 1){
                                 $html .='<li class="separator"><span></span></li>';
+
+                            } else if($entry['level'] > $level){
+                                $level = $entry['level'];
+                                $class = ' lvl_'.$level;
+                                if($entry['level'] == 1) {
+                                    $html.='<div class="submenu">';
+                                }
+                                $html.='<ul class="child '.$class.'">';
                             }
-                        } else if($entry['level'] > $level){
-                            $level = $entry['level'];
-                            $class = ' lvl_'.$level;
-                            if($entry['level'] == 1) {
-                                $html.='<div class="submenu">';
+                            else if($entry['level'] < $level){
+                                if($entry['level'] == 2) {
+                                    if($level - $entry['level']==2) {
+                                        $html .= '</li></ul></li></ul>';
+                                        $html .=  $this->displayMenuPicto($menu_pictos, $base_url);
+                                        $menu_pictos = array();
+                                        $html .= '</div></li>';
+                                    } 
+                                } else if($level - $entry['level']==1 && $entry['level']==0) {
+                                    $html .= '</li></ul>';
+                                    $html .=  $this->displayMenuPicto($menu_pictos, $base_url);
+                                    $menu_pictos = array();
+                                    $html .= '</div></li>';
+                                } else {
+                                    $html.= str_repeat('</li></ul></li>', $level - $entry['level']);
+                                }
+                                $level = $entry['level'];
+
+                                $html .='<li class="separator"><span></span></li>';
+                            }       
+                            if (strpos($entry['title'], '%%')){                          
+                                $title = explode('%%', $entry['title']);
+                                $title = $title[0].'<br /><span class="bold">'.$title[1].'</span>';
+                            }else{
+                                $title = $entry['title'];
                             }
-                            $html.='<ul class="child '.$class.'">';
-                        }
-                        else if($entry['level'] < $level){
-                            if($entry['level'] == 2) {
-                                if($level - $entry['level']==2) {
-                                    $html .= '</li></ul></li></ul></div></li>';
-                                } 
-                            } else if($level - $entry['level']==1 && $entry['level']==0) {
-                                $html .= '</li></ul></div></li>';
+
+                            $class = ($entry['level'] == 0) ? "parent " : "";
+                            $class .= "lvl_".$entry['level'];
+                            $url = '';
+                                 
+                            if(isset($entry['urls_content'])){
+                                $url = $entry['urls_content'];
+                            }
+
+                            if ($url == '') {
+                                $url = $entry['urls'];
+                            }
+
+                            $link = '';
+                            $start_url = substr($url,0,7);
+                            if($start_url == 'http://') {
+                                $link = $url;
                             } else {
-                                $html.= str_repeat('</li></ul></li>', $level - $entry['level']);
+                                $link = $base_url.$url;
+                            }   
+                            
+                            $html .= '<li class="'.$class.'"><a href="'.$link.'" title=""><span class="menu_name">'.$title.'</span></a>';
+
+                            if($key_ent == count($menus)-1){
+                                $html.='</li>'.str_repeat('</ul></div></li>', $level);
+
                             }
-                            $level = $entry['level'];
-
-                            if($level == 1){
-                                $html .='<li class="separator"><span></span></li>';
-                            }
-                        }       
-                        if (strpos($entry['title'], '%%')){                          
-                            $title = explode('%%', $entry['title']);
-                            $title = $title[0].'<br /><span class="bold">'.$title[1].'</span>';
-                        }else{
-                            $title = $entry['title'];
-                        }
-
-                        $class = ($entry['level'] == 0) ? "parent " : "";
-                        $class .= "lvl_".$entry['level'];
-                        $url = '';
-                             
-                        if(isset($entry['urls_content'])){
-                            $url = $entry['urls_content'];
-                        }
-
-                        if ($url == '') {
-                            $url = $entry['urls'];
-                        }
-                        
-                        $html .= '<li class="'.$class.'"><a href="'.$base_url.$url.'" title=""><span class="menu_name">'.$title.'</span></a>';
-
-                        if($key_ent == count($menus)-1){
-                            $html.='</li>'.str_repeat('</ul></div></li>', $level);
-
                         }
                     }
                     $html.='</ul>';             
@@ -249,5 +278,35 @@ class BlocMenu
     public function getMenu()
     {
         return $this->menu;
+    }
+
+    public function displayMenuPicto($menus_picto, $base_url) {
+        if (empty($menus_picto))
+            return '';
+
+        $html = '<ul class="child lvl_2 menu_picto">';
+        foreach($menus_picto as $entry) {
+            $url = '';
+                                 
+            if(isset($entry['urls_content'])){
+                $url = $entry['urls_content'];
+            }
+
+            if ($url == '') {
+                $url = $entry['urls'];
+            }
+
+            $link = '';
+            $start_url = substr($url,0,7);
+            if($start_url == 'http://') {
+                $link = $url;
+            } else {
+                $link = $base_url.$url;
+            } 
+            $media = $entry['media'];
+            $html .= '<li class="lvl_2 picto"><a href="'.$link.'"><table><tr><td><img src="/web/'.$media['image'].'" alt="'.$media['alt'].'" title="'.$media['title'].'" style="float:left"/></td><td>'.$entry['title'].'</td></tr></table></a></li>';
+        }
+        $html .= '</ul>';
+        return $html;
     }
 }

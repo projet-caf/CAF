@@ -144,4 +144,14 @@ class CategoryRepository extends NestedTreeRepository
                     ->getResult();
     }
 
+    public function getCategoryLang($lang) {
+        return $this->getEntityManager()
+                    ->createQueryBuilder('ct')
+                    ->Select('ct')
+                    ->from('CAFContentBundle:CategoryTranslation','ct')
+                    ->where('lang=:lang')
+                    ->setParameter('lang',$lang)
+        ;            
+    }
+
 }

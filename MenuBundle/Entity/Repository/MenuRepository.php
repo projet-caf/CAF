@@ -86,13 +86,12 @@ class MenuRepository extends NestedTreeRepository
                     ->where('node.lft > :lft')
                     ->andwhere('node.rgt < :rgt')
                     ->andwhere('node.root = :root')
-                    ->andwhere('node.parent = :parent')
                     ->andwhere('node.published=:published')
-                    ->setParameter('parent',$id)
                     ->setParameter('lft',$lft)
                     ->setParameter('rgt',$rgt)
                     ->setParameter('root',$root)
                     ->setParameter('published',1)
+                    ->orderBy('node.lft','ASC')
                     ->getQuery()
         ;
     }
@@ -115,11 +114,23 @@ class MenuRepository extends NestedTreeRepository
 		    		->createQueryBuilder()
 				    ->select('trans_ext, menu_ext')
 				    ->from('CAFMenuBundle:MenuTranslation', 'trans_ext')
-                                    ->join('trans_ext.object', 'menu_ext')
-                                    ->groupBy('trans_ext.object')                                 
-                                    ->getQuery()
-                                    ->getArrayResult();   
-                                    ;        
+                    ->join('trans_ext.object', 'menu_ext')
+                    ->groupBy('trans_ext.object')                                 
+                    ->getQuery()
+                    ->getArrayResult();   
+                    ;        
+    }
+
+    public function getMenuByContent($id_content) {
+        return $this->getEntityManager()
+                    ->createQueryBuilder()
+                    ->select('m')
+                    ->from('CAFMenuBundle:Menu','m')
+                    ->leftjoin('m.content','c')
+                    ->where('c.id=:id')
+                    ->setParameter('id',$id_content)
+                    ->getQuery()
+                    ->getResult();
     }    
     
 }

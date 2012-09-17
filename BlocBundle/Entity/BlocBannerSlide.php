@@ -75,7 +75,7 @@ class BlocBannerSlide
         $this->setBloc($bloc);
     }
 
-    public function html($bloc, $path_web, $display_menu){
+    public function html($bloc, $path_web, $display_menu, $html_menu){
         $class='';
         if($display_menu){
             $class = '20';
@@ -104,6 +104,7 @@ class BlocBannerSlide
         }
 
         $html .= '<div class="ban_btn_navi"></div></div>';
+        $html .= $html_menu.'</div>';
 
         $html .=   '<script type="text/javascript">
                     var slide_in = 1;

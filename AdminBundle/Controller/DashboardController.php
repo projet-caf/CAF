@@ -31,7 +31,7 @@ class DashboardController extends Controller
 						 ->lastArticles(5);
 
 		$redirects = $this->getDoctrine()
-						  ->getRepository('CAFAdminBundle:Redirect')
+						  ->getRepository('CAFFrontBundle:ErrorUrl')
 						  ->findAll();
 		return array('articles' => $articles, 'redirects' => $redirects);
 	}

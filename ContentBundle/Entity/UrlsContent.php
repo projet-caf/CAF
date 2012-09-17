@@ -9,7 +9,7 @@ use Doctrine\DBAL\DriverManager;
  * CAF\ContentBundle\Entity\Content
  *
  * @ORM\Table(name="urls_content")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="CAF\ContentBundle\Entity\Repository\UrlsContentRepository")
  */
 class UrlsContent
 {

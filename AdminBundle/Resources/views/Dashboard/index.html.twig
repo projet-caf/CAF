@@ -102,10 +102,8 @@
 					{% if loop.index < 6 %}
 						<tr>
 							<td>{{ redirect.id }}</td>
-							<td>{{ redirect.source|slice(0,30) }}</td>
-							<td>{{ redirect.statuscode }}</td>
-							<td>{{ redirect.count }}</td>
-							<td>{{ redirect.lastaccessed|date('d/m/Y') }}</td>
+							<td>{{ redirect.url|slice(0,30) }}</td>
+							<td>{{ redirect.code }}</td>
 							<td>
 								<a href="{{ path("edit_redirect", {'id': redirect.id} ) }}">
 									<img src="{{ asset('bundles/cafadmin/images/pencil.png') }}" alt="" />

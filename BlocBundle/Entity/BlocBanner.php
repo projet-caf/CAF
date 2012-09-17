@@ -63,7 +63,7 @@ class BlocBanner
         $this->path="media/banners";
     }
 
-    public function html($path_web, $display_menu){
+    public function html($path_web, $display_menu, $html_menu){
         $class='';
         if($display_menu){
             $class = '20';
@@ -72,6 +72,8 @@ class BlocBanner
         }
         $html = '<div class="ban_ht10 ban'.$class.'"><div class="slides">';
         $html .= '<div class="ban_image"><img src="'.$path_web.'/'.$this->path.'" alt="'.$this->image['alt'].'" title="'.$this->image['title'].'"/></div>';
+        $html .= '</div>';
+        $html .= $html_menu;
         $html .= '</div>';
         $this->html = $html;
         return $this;

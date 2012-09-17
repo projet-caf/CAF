@@ -54,19 +54,74 @@ class BlocType extends AbstractType
 				'multiple' => false,
 				'label' => 'Toutes les pages'
 				))
-			->add('categories', 'entity', array(
-				'class' => 'CAFContentBundle:Category',
+			->add('categories_fr', 'entity', array(
+				'class' => 'CAFContentBundle:CategoryTranslation',
+				'query_builder' => 
+			    	function(EntityRepository $er) {
+				        return $er->getCategoryLang(1);
+				    },
 				'required' => false,
 				'multiple' => true, 
 				'label' => 'Catégorie',
 				'attr' => array('class' => 'selectable'),
 				))
-			->add('contents', 'entity', array(
-				'class' => 'CAFContentBundle:Content',
+			->add('contents_fr', 'entity', array(
+				'class' => 'CAFContentBundle:ContentTranslation',
+				'query_builder' => 
+			    	function(EntityRepository $er) {
+				        return $er->getContentLang(1);
+				    },
 				'required' => false,
 				'multiple' => true,
 				'label' => 'Contenu',
 				'attr' => array('class' => 'selectable'),
+				'property' => 'title',
+				))
+			->add('categories_en', 'entity', array(
+				'class' => 'CAFContentBundle:CategoryTranslation',
+				'query_builder' => 
+			    	function(EntityRepository $er) {
+				        return $er->getCategoryLang(2);
+				    },
+				'required' => false,
+				'multiple' => true, 
+				'label' => 'Catégorie',
+				'attr' => array('class' => 'selectable'),
+				))
+			->add('contents_en', 'entity', array(
+				'class' => 'CAFContentBundle:ContentTranslation',
+				'query_builder' => 
+			    	function(EntityRepository $er) {
+				        return $er->getContentLang(2);
+				    },
+				'required' => false,
+				'multiple' => true,
+				'label' => 'Contenu',
+				'attr' => array('class' => 'selectable'),
+				'property' => 'title',
+				))
+			->add('categories_de', 'entity', array(
+				'class' => 'CAFContentBundle:CategoryTranslation',
+				'query_builder' => 
+			    	function(EntityRepository $er) {
+				        return $er->getCategoryLang(3);
+				    },
+				'required' => false,
+				'multiple' => true, 
+				'label' => 'Catégorie',
+				'attr' => array('class' => 'selectable'),
+				))
+			->add('contents_de', 'entity', array(
+				'class' => 'CAFContentBundle:ContentTranslation',
+				'query_builder' => 
+			    	function(EntityRepository $er) {
+				        return $er->getContentLang(3);
+				    },
+				'required' => false,
+				'multiple' => true,
+				'label' => 'Contenu',
+				'attr' => array('class' => 'selectable'),
+				'property' => 'title',
 				))
 		;
 	}

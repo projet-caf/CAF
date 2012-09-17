@@ -5,8 +5,11 @@
 	
 #}
 
-{% set class = cols %}
-<div class="middle_block span{{cols}}0 border">
+{% set class = "middle_block span" ~ cols ~ "0 " ~ pos %}
+{% if pos != "left" and cols < 3 %}
+	{% set class = class ~ " border" %}
+{% endif %}
+<div class="{{ class }}">
 	<div class="article_gn">
 
 			<h1>{{ category.title }}</h1>

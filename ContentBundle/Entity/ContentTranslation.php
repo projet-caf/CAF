@@ -593,4 +593,8 @@ class ContentTranslation
         return $content_url;
     }
 
+    public function __toString() {
+        return $this->title;
+    }
+
 }

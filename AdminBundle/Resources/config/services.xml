@@ -17,4 +17,9 @@
         </service>
     </services>
     -->
+    <services>
+        <service id="form.type.select" class="CAF\AdminBundle\Form\SelectType">    
+            <tag name="form.type" alias="select" />
+        </service>    
+    </services>
 </container>

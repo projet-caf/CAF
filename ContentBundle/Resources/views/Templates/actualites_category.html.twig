@@ -14,9 +14,12 @@
 		<h1>{{ category.title|upper }}</h1>
 		{% set media = '' %}
 		{% set short_desc = '' %}
-		{% set date_news = '' %}
+		
 		{% for article in category.contents %}
-			{% if article.lang.code == lang %}
+			{% set date_news = '' %}
+			{% set debut_valid = '' %}
+			{% set fin_valid = '' %}
+			{% if article.lang.code == lang  %}
 				{% for value in article.fieldsValue %}
 					{% if value.field.idFieldTaxonomy.name == 'Image' %}
 						{% set media = value.value %}
@@ -27,19 +30,33 @@
 					{% if value.field.name == 'date_news' %}
 						{% set date_news = value.value %}
 					{% endif %}
+					{% if value.field.name == 'debut_valid' %}
+						{% set debut_valid = value.value %}
+					{% endif %}
+					{% if value.field.name == 'fin_valid' %}
+						{% set fin_valid = value.value %}
+					{% endif %}		
 				{% endfor %}
+				{% if date(debut_valid) <= date() and date(fin_valid) >= date() %}
 				<div class="left-actu-cat">
 					<a href="{{ path('front', {'lang': lang, 'country': country, 'url': article.contentUrls.0.url }) }}">
-						<img src="{{ asset(media.image) }}" alt="{{ media.alt }}" title="{{ media.title }}" class="img-left" />
+						{% if media.image != '' %}
+							<img src="{{ asset(media.image) }}" alt="{{ media.alt }}" title="{{ media.title }}" class="img-left" />
+						{% else %}
+							<img src="{{ asset('bundles/cafadmin/images/image-par-defaut.jpg') }}"	alt="{{ article.title }}" title="{{ article.title }}" />
+						{% endif %}	
 					</a>
 				</div>
 				<div class="right-cat">
 					<h2>{{ article.title }}</h2>
-					{{ date_news }}
+					<em>{{ date_news|date('d/m/Y') }}</em>
 					{{ short_desc|raw }}
 				</div>
-			{% endif %}
+			
 			<div class="clear"></div>
+			<div class="sep"></div>
+			{% endif %}
+			{% endif %}
 		{% endfor %}
 	</div>
 </div>

@@ -303,8 +303,14 @@ class ContentController extends Controller
 						$t->setContentUrls($content_urls);
 					} else {
 						$t->setContentUrls('generate');
-
 					}
+					/*$menus = $this->getDoctrine()->getRepository('CAFMenuBundle:Menu')->getMenuByContent($t->getId());
+					foreach($menus as $menu) {
+						if(!empty($content_urls)) {
+							$menu->setUrlsContent($content_urls[0]->getUrl());
+							$em->persist($menu);
+						}
+					}*/
 				}
 
 				$em->persist($content);

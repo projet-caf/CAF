@@ -63,10 +63,14 @@ class ContentLoader
 								$valuesFr[$fieldvalue->getField()->getName()]['image'] = $temp_value['image'];
 							} else {
 								$valuesFr[$fieldvalue->getField()->getName()]['image'] ='';
-							}
+							} 
+						} else if($fieldvalue->getField()->getIdFieldTaxonomy()->getName() == 'Date' && $temp_value != '') {
+							$date_tab = explode('/',$temp_value);
+							$valuesFr[$fieldvalue->getField()->getName()] = implode('/',array_reverse($date_tab));	
 						} else {
 							$valuesFr[$fieldvalue->getField()->getName()] = $temp_value;	
 						}
+						
 					}
 
 					foreach ($metasvalue as $metavalue) {
@@ -156,7 +160,7 @@ class ContentLoader
 		
 	}
 
-	public function loadContentTranslation($path_upload, $translation, $values, $files, $metasvalues, $lang, $country, FieldsRepository $repository, MetasRepository $meta_repo, ContentTaxonomy $content_taxonomy)
+	public function loadContentTranslation($path_upload, $translation, $values, $files, $metasvalues, $lang, $country, MenuRepository $menu_repo, MetasRepository $meta_repo, ContentTaxonomy $content_taxonomy)
 	{
 
 		$configUpload = new ConfigurationUpload();
@@ -166,7 +170,13 @@ class ContentLoader
 		foreach($fields as $field) {
 			$fieldValue = new FieldsValue();
 			if(isset($values[$field->getName()])) {
-				$value = $values[$field->getName()];
+				if($field->getIdFieldTaxonomy()->getName() == 'Date') {
+					$date_raw = $values[$field->getName()];
+					$date_tab = explode('/', $date_raw);
+					$value = implode('/',array_reverse($date_tab));
+				} else {
+					$value = $values[$field->getName()];	
+				}
 			}
 
 			if(isset($files[$field->getName()])) {
@@ -198,9 +208,11 @@ class ContentLoader
 			$metasValue = new MetasValue();
 			$metasValue->setMeta($meta);
 			$metasValue->setContentTranslation($translation);
-			if ($name == 'Title' && $value == '') {
-				$value = $translation->getTitle();
+
+			if($name == 'Title' && $value != '') {
+				$value = $translation->getTitle();					
 			}
+
 			$metasValue->setValue($value);
 			$translation->addMetasValue($metasValue);
 		}
@@ -219,7 +231,13 @@ class ContentLoader
 			$value = '';
 
 			if(isset($values[$field->getName()])) {
-				$value = $values[$field->getName()];
+				if($field->getIdFieldTaxonomy()->getName() == 'Date') {
+					$date_raw = $values[$field->getName()];
+					$date_tab = explode('/', $date_raw);
+					$value = implode('/',array_reverse($date_tab));
+				} else {
+					$value = $values[$field->getName()];	
+				}
 			}
 
 			if(isset($files[$field->getName()])) {

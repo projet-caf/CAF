@@ -33,12 +33,12 @@
 							<a href="javascript:" onclick="publish({{ translation_id}},1);"><img src="{{ asset("bundles/cafadmin/images/block.png") }}" id="field_{{ translation_id }}" rel="tooltip" title="Non publié" /></a>
 						{% endif %}
 						</td>
-						<td>{{ translation.description| truncate(100, true, '...') }}</td>
+						<td>{{ translation.description|truncate(100, true, '...')|raw }}</td>
 						{% set nb_metas = 0 %}
 						{% for metavalue in translation.metasvalue %}
 							{% if metavalue.meta.name == 'Title' or metavalue.meta.name == 'Description' %}
 								{% if metavalue.value is defined %}
-								<td>{{ metavalue.value }}</td>
+								<td>{{ metavalue.value|raw }}</td>
 								{% else %}
 								<td></td>
 								{% endif %}
@@ -55,7 +55,7 @@
 					    	<h3>Suppression de la catégorie ?</h3>
 					    </div>
 					    <div class="modal-body">
-					    	<p>Voulez-vous supprimer cette catégorie ?</p>
+					    	<p>Attention si vous supprimer cette catégorie, toutes les traductions seront aussi supprimées. Voulez-vous vraiment supprimer cette catégorie ?</p>
 					    </div>
 					    <div class="modal-footer">
 					    	<a href="#" class="btn" data-dismiss="modal">Non</a>

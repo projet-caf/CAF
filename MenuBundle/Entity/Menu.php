@@ -74,14 +74,14 @@ class Menu implements Translatable
     private $urls_content;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CAF\ContentBundle\Entity\CategoryTranslation", inversedBy="menus")
-     * @ORM\JoinColumn(name="category", nullable=true)
+     * @Gedmo\Translatable
+     * @ORM\Column(type="integer")
      */
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CAF\ContentBundle\Entity\ContentTranslation", inversedBy="menus")
-     * @ORM\JoinColumn(name="content", nullable=true)
+     * @Gedmo\Translatable
+     * @ORM\Column(type="integer")
      */
     private $content;
 
@@ -181,11 +181,6 @@ class Menu implements Translatable
      */
     public $file;
 
-    /**
-     * @var array myCategory
-     */
-    private $myCategory;   
-      
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -224,17 +219,7 @@ class Menu implements Translatable
     {
         return $this->title;
     }
-    
-    public function getMyCategory()
-    {
-        return $this->myCategory;
-    }    
-    
-    public function setMyCategory(array $myCategory)
-    {
-        $this->myCategory = $myCategory;
-    }    
-    
+
     public function setDescription($description)
     {
         $this->description = $description;
@@ -292,7 +277,7 @@ class Menu implements Translatable
 
     public function __toString()
     {
-        return $this->getTitle();
+        return str_repeat('-', $this->getLevel()).' '.$this->getTitle();
     }
 
     /**
@@ -648,10 +633,10 @@ class Menu implements Translatable
     /**
      * Set category
      *
-     * @param CAF\ContentBundle\Entity\Category $category
+     * @param CAF\ContentBundle\Entity\CategoryTranslation $category
      * @return Menu
      */
-    public function setCategory(\CAF\ContentBundle\Entity\CategoryTranslation $category = null)
+    public function setCategory($category = null)
     {
         $this->category = $category;
     
@@ -661,7 +646,7 @@ class Menu implements Translatable
     /**
      * Get category
      *
-     * @return CAF\ContentBundle\Entity\Category 
+     * @return CAF\ContentBundle\Entity\CategoryTranslation
      */
     public function getCategory()
     {
@@ -671,10 +656,10 @@ class Menu implements Translatable
     /**
      * Set content
      *
-     * @param CAF\ContentBundle\Entity\Content $content
+     * @param CAF\ContentBundle\Entity\ContentTranslation $content
      * @return Menu
      */
-    public function setContent(\CAF\ContentBundle\Entity\ContentTranslation $content = null)
+    public function setContent($content = null)
     {
         $this->content = $content;
     

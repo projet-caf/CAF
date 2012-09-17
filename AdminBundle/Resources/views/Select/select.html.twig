@@ -1,0 +1,9 @@
+{% block body %}
+<option value="">-</option>
+
+{% for item in message %}
+	<option value="{{ item.id }}">{{ item.translations.0.title }}</option>
+{% endfor %}
+
+
+{% endblock body %}

@@ -15,8 +15,6 @@ class MenuType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 
-                $lang_id = $options["lang"];
-            
 		$menu_taxonomy = $options['menu_taxonomy'];
 		$builder->add('title','text', array('label' => 'Titre'))
 				->add('slug', 'text', array('required' => false, 'label' => 'Alias'))
@@ -30,36 +28,25 @@ class MenuType extends AbstractType
 				))
 
 				->add('link_taxonomy', 'link', array('attr' => array('class' => 'link'), 'label' => 'Type de lien'))
-				/*->add('category','entity', array(
+				->add('category','entity', array(
 					'attr' => array('class' => 'category'),
-					'class' => 'CAFContentBundle:Category',
+					'class' => 'CAFContentBundle:CategoryTranslation',
+					'query_builder' => function(EntityRepository $er) {
+						return $er->getCategoryLang(1);
+					},
 					'empty_value' => 'Choisissez une catégorie',
 					'required' => false,
 					))
 				->add('content','entity', array(
 					'attr' => array('class' => 'category'),
-					'class' => 'CAFContentBundle:Content',
+					'class' => 'CAFContentBundle:ContentTranslation',
+					'query_builder' => function(EntityRepository $er) {
+						return $er->getContentLang(1);
+					},
 					'empty_value' => 'Choisissez un contenu',
 					'required' => false,
-					))*/
-                                //->add('myCategory','select', array('required' => false, 'lang_id' => $options['lang'], 'label' => ' '))
+					))
 
-                                ->add('category', 'entity', array(
-                                    'class' => 'CAFContentBundle:CategoryTranslation',
-                                    'query_builder' => function(EntityRepository $er) use ($lang_id) {
-                                            return $er->getCategoryLang($lang_id);
-                                        },                                                                                   
-                                    'property' => 'title',
-                                    'required'  => false,
-                                    'empty_value' => '-'            
-                                    ))
-                                ->add('content', 'entity', array(
-                                    'class' => 'CAFContentBundle:ContentTranslation',   
-                                    'empty_value' => '-',
-                                    'required'  => false,
-                                    'property' => 'title',
-                                    ))                            
-                        
 				->add('urls', 'text', array('attr' => array('class' => 'url'),'required' => false))
 				->add('parent', 'entity', array(
 				    'class' => 'CAFMenuBundle:Menu',

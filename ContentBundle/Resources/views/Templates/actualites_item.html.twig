@@ -12,12 +12,12 @@
 <div class="{{ class }}">
 	<div class="article_gn">
 		
-		{% set image = '' %}
+		{% set media = '' %}
 		{% set desc = '' %}
 		{% set date = '' %}
 		{% for value in article.fieldsValue %}
 			{% if value.field.idFieldTaxonomy.name == 'Image' %}
-				{% set image = '<img src="' ~ asset(value.value.image) ~ '" alt="' ~ value.value.alt ~ '" title="' ~ value.value.title ~ '" class="img-left" />' %}
+				{% set media = value.value %}
 			{% endif %}
 			{% if value.field.name == 'description' %}
 				{% set desc = value.value %}
@@ -27,7 +27,11 @@
 			{% endif %}
 		{% endfor %}
 		<div class="left-actu-cat">
-			{{ image|raw }}
+			{% if media.image != '' %}
+				<img src="{{ asset(media.image) }}" alt="{{ media.alt }}" title="{{ media.title }}" class="img-left" />
+			{% else %}
+				<img src="{{ asset('bundles/cafadmin/images/image-par-defaut.jpg') }}"	alt="{{ article.title }}" title="{{ article.title }}" />
+			{% endif %}	
 		</div>
 		<div class="right-cat">
 			<h1 class="title_actu">{{ article.title|upper }}</h1><span class="date_actu"> - {{ date }}</span>

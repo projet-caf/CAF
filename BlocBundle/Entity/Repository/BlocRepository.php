@@ -60,7 +60,7 @@ class BlocRepository extends EntityRepository
 					->createQueryBuilder('b')
 					->Select('b')
 					->from('CAFBlocBundle:Bloc','b')
-					->leftjoin('b.contents', 'con')
+					->leftjoin('b.contents_fr', 'con')
 					->where('con.id =:item_id')
 					->andWhere('b.position =:position')
 					->andWhere('b.published =:published')
@@ -77,7 +77,7 @@ class BlocRepository extends EntityRepository
 					->createQueryBuilder('b')
 					->Select('b')
 					->from('CAFBlocBundle:Bloc','b')
-					->leftjoin('b.categories', 'cat')
+					->leftjoin('b.categories_fr', 'cat')
 					->where('cat.id =:cat_id')
 					->andWhere('b.position =:position')
 					->andWhere('b.published =:published')
@@ -91,13 +91,13 @@ class BlocRepository extends EntityRepository
 		}
     }
 
-    public function getBlocBaseItem($position, $cats, $item_id) {
+    public function getBlocBaseItem($position, $cats, $item_id,$lang='fr') {
     		return $this->getEntityManager()
 					->createQueryBuilder('b')
 					->Select('b')
 					->from('CAFBlocBundle:Bloc','b')
-					->leftjoin('b.categories', 'cat')
-					->leftjoin('b.contents', 'con')
+					->leftjoin('b.categories_'.$lang, 'cat')
+					->leftjoin('b.contents_'.$lang, 'con')
 					->where('con.id =:item_id')
 					->orWhere('cat.id in (:cats)')
 					->setParameter('cats', $cats)
@@ -111,13 +111,13 @@ class BlocRepository extends EntityRepository
 					->getResult();
 	}
 					
-	public function getBlocBaseCategory($position, $cat_id) {
+	public function getBlocBaseCategory($position, $cat_id,$lang='fr') {
 
     		return $this->getEntityManager()
 					->createQueryBuilder('b')
 					->Select('b')
 					->from('CAFBlocBundle:Bloc','b')
-					->leftjoin('b.categories', 'cat')
+					->leftjoin('b.categories_'.$lang, 'cat')
 					->where('cat.id =:cat_id')
 					->andWhere('b.position =:position')
 					->andWhere('b.published =:published')

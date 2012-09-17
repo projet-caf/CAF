@@ -25,34 +25,36 @@ class ModuleController extends Controller
                        ->getRepository('CAFBlocBundle:Bloc');
         $path_web = $request->getBasePath();
         $base_url = $this->container->get('router')->getContext()->getBaseUrl();
-        $base_url .= '/'.$lang.'/'.$country.'/';
+        $base_url .= '/'.$lang.'/'.$lang.'/';
         if($item_id != null)
-		    $bloc_base = $repository->getBlocBaseItem($position, $cats, $item_id);
+		    $bloc_base = $repository->getBlocBaseItem($position, $cats, $item_id,$lang);
         else
-            $bloc_base = $repository->getBlocBaseCategory($position, $cat_id);  
+            $bloc_base = $repository->getBlocBaseCategory($position, $cat_id,$lang);  
 
         //if (!$bloc_base) {
             $bloc_temp = $repository->getBlocBaseDefault($position);
             $bloc_base = array_merge($bloc_base,$bloc_temp);
         //}
-
-
+            
         if (!$bloc_base) {
             $module = null;
         }else{   
             if($unique){  	
                 $params = json_decode($bloc_base[0]->getParams());
                 $bloc = $this->getBloc($params);
-                $module = $this->displayBloc($position,$display_menu, $path, $path_web, $bloc, $unique, $lang, 1, 1, $base_url,$cats,$cat_id,$item_id);
+                $module = $this->displayBloc($position,$display_menu, $path, $path_web, $bloc, $unique, $lang, 1, 1, $base_url,$cats,$cat_id,$item_id,$repository);
             }else{   
                 foreach ($bloc_base as $key => $bloc_b) {   
                     $params = json_decode($bloc_b->getParams());
                     $bloc = $this->getBloc($params);
-                    $module[] = $this->displayBloc($position,$display_menu, $path, $path_web, $bloc, $unique, $lang, count($bloc_base), $key, $base_url,$cats,$cat_id,$item_id);
+                    $module[] = $this->displayBloc($position,$display_menu, $path, $path_web, $bloc, $unique, $lang, count($bloc_base), $key, $base_url,$cats,$cat_id,$item_id,$repository);
                 }            
             }
         }
-        $html=$this->htmlpos($position);
+        if($position == 'right' && !empty($bloc_base))
+            $html = $this->htmlpos($position,' bordered');
+        else
+            $html = $this->htmlpos($position);
 
         return $this->render('CAFFrontBundle:Modules:module.html.twig', array('module' => $module, 'lang' => $lang, 'unique' => $unique, 'render' => true, 'html' => $html));
         
@@ -65,7 +67,7 @@ class ModuleController extends Controller
         return $repository->findOneBy(array('id' => $params->bloc_id));
     }
 
-    public function displayBloc($position, $display_menu, $path, $path_web, $bloc, $unique, $lang, $size, $key, $base_url, $cats, $cat_id, $item_id){
+    public function displayBloc($position, $display_menu, $path, $path_web, $bloc, $unique, $lang, $size, $key, $base_url, $cats, $cat_id, $item_id,$repository){
 
         switch ($bloc->getType()) {
             case 'BlocMenu':
@@ -81,10 +83,10 @@ class ModuleController extends Controller
                 return $this->displayBlocHtml($position, $bloc, $lang, $key, $size);
                 break;
             case 'BlocBannerSlide':
-                return $this->displayBlocBannerSlide($bloc, $path_web, $display_menu);
+                return $this->displayBlocBannerSlide($bloc, $path_web, $display_menu, $cats, $cat_id, $item_id, $lang, $base_url, $repository);
                 break;
             case 'BlocBanner':
-                return $this->displayBlocBanner($bloc, $path_web, $display_menu);
+                return $this->displayBlocBanner($bloc, $path_web, $display_menu, $cats, $cat_id, $item_id, $lang, $base_url, $repository);
                 break;
             case 'BlocBannerRight':
                 return $this->displayBlocBannerRight($bloc, $path_web);
@@ -136,13 +138,52 @@ class ModuleController extends Controller
         return $bloc->html;
     }
 
-    public function displayBlocBannerSlide($bloc, $path_web, $display_menu){
-        $module = $bloc->html($bloc, $path_web, $display_menu);
+    public function displayBlocBannerSlide($bloc, $path_web, $display_menu, $cats, $cat_id, $item_id, $lang, $base_url, $repository) {
+
+        if($item_id != null) {
+            $bloc_menu = $repository->getBlocBaseItem('banner', $cats, $item_id);
+        } else {
+            $bloc_menu = $repository->getBlocBaseCategory('banner', $cat_id);
+        }
+
+        $bloc_temp = $repository->getBlocBaseDefault('banner');
+        $bloc_menu = array_merge($bloc_menu,$bloc_temp);
+
+        $html_menu = '';
+        if(!empty($bloc_menu)) {
+            $bloc_menu = current($bloc_menu);
+            $params = json_decode($bloc_menu->getParams());
+            $bloc_menu = $this->getBloc($params);
+            if(is_object($bloc_menu))
+                $html_menu = $this->displayBlocMenu($path_web,$bloc_menu, 1, $lang, $base_url, $cats, $cat_id, $item_id);
+        }
+
+        $module = $bloc->html($bloc, $path_web, $display_menu, $html_menu);
         return $bloc->html;
     }
 
-    public function displayBlocBanner($bloc, $path_web, $display_menu){
-        $module = $bloc->html($path_web, $display_menu);
+    public function displayBlocBanner($bloc, $path_web, $display_menu, $cats, $cat_id, $item_id, $lang, $base_url,$repository){
+
+
+        if($item_id != null) {
+            $bloc_menu = $repository->getBlocBaseItem('banner', $cats, $item_id);
+        } else {
+            $bloc_menu = $repository->getBlocBaseCategory('banner', $cat_id);
+        }
+        $bloc_temp = $repository->getBlocBaseDefault('banner');
+        $bloc_menu = array_merge($bloc_menu,$bloc_temp);
+
+        $html_menu = '';
+        if(!empty($bloc_menu)) {
+            $bloc_menu = current($bloc_menu);
+            $params = json_decode($bloc_menu->getParams());
+            $bloc_menu = $this->getBloc($params);
+            if(is_object($bloc_menu))
+                $html_menu = $this->displayBlocMenu($path_web,$bloc_menu, 1, $lang, $base_url, $cats, $cat_id, $item_id);
+        }
+            
+
+        $module = $bloc->html($path_web, $display_menu, $html_menu);
         return $bloc->html;
     }
 
@@ -177,7 +218,7 @@ class ModuleController extends Controller
         return $module;
     }
 
-    public function htmlpos($position){
+    public function htmlpos($position,$class=''){
         switch ($position) {
             case 'left':
                     $array['start']='<div class="left_block_side">';
@@ -185,7 +226,7 @@ class ModuleController extends Controller
                     return $array;
                 break;
             case 'right':
-                    $array['start']='<div class="right_block">';
+                    $array['start']='<div class="right_block'.$class.'">';
                     $array['end']='</div>';
                     return $array;
                 break;
