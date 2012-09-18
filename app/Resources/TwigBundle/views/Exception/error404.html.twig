@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+    {{ metas|raw }}
+     {% stylesheets filter='cssrewrite' output='css/*.css'
+	    'bundles/caffront/css/style.css'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+	{% block stylesheets %}{% endblock %}
+    {% block linkscript %}
+    	<script src="{{ asset('bundles/cafadmin/js/jquery.js') }}" type="text/javascript" ></script>
+    	<script type="text/javascript" src="{{ asset('bundles/caffront/js/jquery.hoverIntent.minified.js') }}"></script>
+    {% endblock %}
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+</head>
+
+<body>
+	<div class="wrap">
+		
+		{% render "CAFFrontBundle:Common:header" with {'display_menu': display_menu, 'lang': lang, 'cat_id':cat_id, 'item_id':item_id, 'country': country, 'cats': cats} %}
+		{% render "CAFFrontBundle:Common:banner" with {'display_menu': display_menu, 'slider':1, 'lang': lang, 'cat_id':cat_id, 'item_id':item_id, 'cats': cats} %}
+		
+		<div class="content">
+			Error 404
+		</div>
+	</div>
+</body>		

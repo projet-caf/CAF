@@ -1,0 +1,83 @@
+{% stylesheets filter='cssrewrite' output='css/*.css'
+    'bundles/cafadmin/css/bootstrap.css'
+    'bundles/cafadmin/css/bootstrap-responsive.css'
+    'bundles/cafadmin/css/style.css'
+    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.20/themes/ui-lightness/jquery-ui.css'
+%}
+   <link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+{% endstylesheets %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+		{% render "CAFMenuBundle:Menu:getMenu" with {}, { 'standalone': true } %}
+		<div class="container">
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="page-header">
+						<div class="span6">
+							<h1>{% block titlesection %}{% endblock titlesection %}</h1>
+						</div>
+						<div class="span6">
+							<div class="pull-right">
+								{% block action %}{% endblock action %}
+							</div>	
+						</div>
+						<div class="clearfix"></div>
+					</div>
+        			{% block body %}{% endblock body %}
+				</div>
+			</div>		
+		</div>
+       	{% javascripts 
+			'bundles/cafadmin/js/jquery.js'
+			'bundles/cafadmin/js/bootstrap-transition.js'
+			'bundles/cafadmin/js/bootstrap-alert.js'
+			'bundles/cafadmin/js/bootstrap-modal.js'
+			'bundles/cafadmin/js/bootstrap-dropdown.js'
+			'bundles/cafadmin/js/bootstrap-scrollspy.js'
+			'bundles/cafadmin/js/bootstrap-tab.js'
+			'bundles/cafadmin/js/bootstrap-tooltip.js'
+			'bundles/cafadmin/js/bootstrap-popover.js'
+			'bundles/cafadmin/js/bootstrap-button.js'
+			'bundles/cafadmin/js/bootstrap-collapse.js'
+			'bundles/cafadmin/js/jquery-ui-1.8.21.custom.min.js'	
+			'http://jquery-ui.googlecode.com/svn/trunk/ui/i18n/jquery.ui.datepicker-fr.js'	
+		%}
+		<script type="text/javascript" src="{{ asset_url }}">
+		</script>
+		<script type="text/javascript" >
+		  $(function () {
+			$("input.datepicker").datepicker({
+	            dateFormat: 'dd/mm/yy',
+	            buttonImage: '{{asset("bundles/cafcrm/images/calendar.png")}}',
+	            buttonImageOnly: true,
+	            showOn: "button",
+	            clickInput:true,
+	            firstDay:1
+       		 });
+			})
+		</script>
+		{% endjavascripts %}
+		{% block script %}{% endblock %}
+		{% block footer %}
+		<div class="clearfix"></div>
+
+		<div class="container">
+			<hr>
+			<div class="row">
+				<div class="span4 offset4">
+					<p>Designed by <a href="http://www.3c-e.com" target="_blank">3c-Evolution</a> | Powered by <a href="http://symfony.com">Symfony</a></p>
+				</div>	
+			</div>
+		</div>
+			
+		{% endblock footer %}
+	</body>
+</html>		

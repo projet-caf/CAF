@@ -1,0 +1,10 @@
+{% macro input(libelle, name, value, type, size) %}
+	<label for="{{ name }}">{{ libelle }}</label> 
+    <input type="{{ type|default('text') }}" name="{{ name }}" id="{{name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+{% endmacro %}
+
+
+{% macro textarea(libelle,name, value, rows) %}
+	<label for="{{ name }}">{{ libelle }}</label> 
+    <textarea name="{{ name }}" rows="{{ rows|default(10) }}" cols="{{ cols|default(40) }}" id="{{ name }}">{{ value|e }}</textarea>
+{% endmacro %}
